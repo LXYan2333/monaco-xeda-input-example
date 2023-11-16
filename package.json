@@ -21,5 +21,8 @@
     "packages/tree-sitter-xeda-input",
     "packages/xeda-lsp",
     "packages/monaco-xeda-input"
-  ]
+  ],
+  "dependencies": {
+    "firacode": "^6.2.0"
+  }
 }

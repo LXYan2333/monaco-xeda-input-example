@@ -23,7 +23,7 @@ buildWorkerDefinition('../../node_modules/monaco-editor-workers/dist/workers/', 
 
 const languageId = 'xeda';
 
-const setup_and_run = async (elem: HTMLElement, editorText: string) => {
+const setup_and_run = async (elem: HTMLElement, editorText: string, fontFamily: string) => {
     // use this to demonstrate all possible services made available by the monaco-vscode-api
     await initServices({
         userServices: {
@@ -78,7 +78,7 @@ const setup_and_run = async (elem: HTMLElement, editorText: string) => {
 
     updateUserConfiguration(`{
     "editor.fontSize": 14,
-    "editor.fontFamily": "Fira Code Retina",
+    "editor.fontFamily": "${fontFamily}",
     "workbench.colorTheme": "Default Light Modern"
 }`);
 
@@ -132,11 +132,11 @@ const setup_and_run = async (elem: HTMLElement, editorText: string) => {
  * @param editorText 要展示的文本内容
  * @returns 编辑器实例的`Promise`。在`.then`中，通过 `.getModel().getValue()` 异步获取编辑器内容
  */
-export async function attach_monaco_to(elem: HTMLElement, editorText: string) {
+export async function attach_monaco_to(elem: HTMLElement, editorText: string, fontFamily: string) {
     try {
         console.log("init");
 
-        return await setup_and_run(elem, editorText);
+        return await setup_and_run(elem, editorText, fontFamily);
 
     } catch (E) {
         console.log("Failed to attach monaco. Reason:", E);

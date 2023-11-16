@@ -26,7 +26,7 @@ matom = 3 3 3 3
 mmult = 1 1 1 1 
 mcharge = 0 0 0 0
 $end
-`);
+`, 'Fira Code');
 
 
 a.then(editor => {

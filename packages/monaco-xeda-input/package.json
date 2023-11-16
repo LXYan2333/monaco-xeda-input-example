@@ -20,7 +20,6 @@
     "@codingame/monaco-vscode-textmate-service-override": "~1.83.3",
     "@codingame/monaco-vscode-theme-defaults-default-extension": "~1.83.3",
     "@codingame/monaco-vscode-theme-service-override": "~1.83.3",
-    "firacode": "^6.2.0",
     "monaco-editor-workers": "~0.44.0",
     "monaco-languageclient": "~6.6.1",
     "xeda-lsp": "^1.0.0"
