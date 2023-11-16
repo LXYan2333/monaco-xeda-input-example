@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite';
 import * as fs from 'fs';
 import url from 'url';
-import vsixPlugin from '@codingame/monaco-vscode-rollup-vsix-plugin'
 
 
 // https://vitejs.dev/config/
