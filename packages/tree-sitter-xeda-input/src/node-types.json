@@ -1,0 +1,259 @@
+[
+  {
+    "type": "coordinate",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "coordinates",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "coordinate",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "ctr_item",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "ctr_keyword",
+          "named": true
+        },
+        {
+          "type": "ctr_value",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "ctr_item_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "ctr_item",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "ctr_keyword",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "ctr_section",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "ctr_item_list",
+          "named": true
+        },
+        {
+          "type": "ctr_start_token",
+          "named": true
+        },
+        {
+          "type": "end_token",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "eda_item",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "eda_keyword",
+          "named": true
+        },
+        {
+          "type": "eda_value",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "eda_item_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "eda_item",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "eda_keyword",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "eda_section",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "eda_item_list",
+          "named": true
+        },
+        {
+          "type": "eda_start_token",
+          "named": true
+        },
+        {
+          "type": "end_token",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "eda_value",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "geo_item",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "atom_name",
+          "named": true
+        },
+        {
+          "type": "coordinates",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "geo_item_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "geo_item",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "geo_section",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "end_token",
+          "named": true
+        },
+        {
+          "type": "geo_item_list",
+          "named": true
+        },
+        {
+          "type": "geo_start_token",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "source_file",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "ctr_section",
+          "named": true
+        },
+        {
+          "type": "eda_section",
+          "named": true
+        },
+        {
+          "type": "geo_section",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "=",
+    "named": false
+  },
+  {
+    "type": "atom_name",
+    "named": true
+  },
+  {
+    "type": "ctr_start_token",
+    "named": true
+  },
+  {
+    "type": "ctr_value",
+    "named": true
+  },
+  {
+    "type": "eda_start_token",
+    "named": true
+  },
+  {
+    "type": "end_token",
+    "named": true
+  },
+  {
+    "type": "geo_start_token",
+    "named": true
+  }
+]

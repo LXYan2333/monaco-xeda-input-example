@@ -1,0 +1,25 @@
+{
+  "name": "xeda-lsp",
+  "version": "1.0.0",
+  "description": "Language server protocol for XEDA",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "lsp",
+    "xeda"
+  ],
+  "author": "LXYan2333",
+  "license": "LGPL-3.0-or-later",
+  "dependencies": {
+    "fuse.js": "^7.0.0",
+    "tree-sitter-xeda-input": "^1.0.0",
+    "vscode-languageserver": "^9.0.1",
+    "vscode-languageserver-textdocument": "^1.0.11",
+    "web-tree-sitter": "^0.20.8"
+  },
+  "devDependencies": {
+    "typescript": "^5.2.2"
+  }
+}

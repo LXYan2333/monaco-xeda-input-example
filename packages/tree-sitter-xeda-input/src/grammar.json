@@ -1,0 +1,289 @@
+{
+  "name": "XEDA",
+  "rules": {
+    "source_file": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "ctr_section"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "geo_section"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "eda_section"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        }
+      ]
+    },
+    "_line_ending": {
+      "type": "PATTERN",
+      "value": "[ ]*\\r?\\n"
+    },
+    "_space": {
+      "type": "STRING",
+      "value": " "
+    },
+    "ctr_section": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "ctr_start_token"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "ctr_item_list"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "end_token"
+        }
+      ]
+    },
+    "ctr_start_token": {
+      "type": "PATTERN",
+      "value": "\\$[cC][tT][rR][lL]?"
+    },
+    "ctr_item_list": {
+      "type": "REPEAT1",
+      "content": {
+        "type": "SYMBOL",
+        "name": "ctr_item"
+      }
+    },
+    "ctr_item": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "ctr_keyword"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "="
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "ctr_value"
+                }
+              ]
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        }
+      ]
+    },
+    "ctr_keyword": {
+      "type": "PATTERN",
+      "value": "[^ =$\\r\\n]+"
+    },
+    "ctr_value": {
+      "type": "PATTERN",
+      "value": "[^ $\\r\\n]+"
+    },
+    "end_token": {
+      "type": "PATTERN",
+      "value": "\\$[eE][nN][dD]"
+    },
+    "geo_section": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "geo_start_token"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "geo_item_list"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "end_token"
+        }
+      ]
+    },
+    "geo_start_token": {
+      "type": "PATTERN",
+      "value": "\\$[gG][eE][oO][mM]?"
+    },
+    "geo_item_list": {
+      "type": "REPEAT1",
+      "content": {
+        "type": "SYMBOL",
+        "name": "geo_item"
+      }
+    },
+    "geo_item": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "atom_name"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "coordinates"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_line_ending"
+        }
+      ]
+    },
+    "atom_name": {
+      "type": "PATTERN",
+      "value": "[^ $\\r\\n0-9\\-\\.]+"
+    },
+    "coordinates": {
+      "type": "REPEAT1",
+      "content": {
+        "type": "SYMBOL",
+        "name": "coordinate"
+      }
+    },
+    "coordinate": {
+      "type": "PATTERN",
+      "value": "[^$\\r\\n ]+"
+    },
+    "eda_section": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "eda_start_token"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "eda_item_list"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "end_token"
+        }
+      ]
+    },
+    "eda_start_token": {
+      "type": "PATTERN",
+      "value": "\\$[eE][dD][aA]"
+    },
+    "eda_item_list": {
+      "type": "REPEAT1",
+      "content": {
+        "type": "SYMBOL",
+        "name": "eda_item"
+      }
+    },
+    "eda_item": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "eda_keyword"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "="
+                },
+                {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "REPEAT1",
+                      "content": {
+                        "type": "SYMBOL",
+                        "name": "eda_value"
+                      }
+                    },
+                    {
+                      "type": "BLANK"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_line_ending"
+        }
+      ]
+    },
+    "eda_keyword": {
+      "type": "PATTERN",
+      "value": "[^ =$\\r\\n]+"
+    },
+    "eda_value": {
+      "type": "PATTERN",
+      "value": "[^$\\r\\n ]+"
+    }
+  },
+  "extras": [
+    {
+      "type": "SYMBOL",
+      "name": "_line_ending"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "_space"
+    }
+  ],
+  "conflicts": [],
+  "precedences": [],
+  "externals": [],
+  "inline": [],
+  "supertypes": []
+}
+

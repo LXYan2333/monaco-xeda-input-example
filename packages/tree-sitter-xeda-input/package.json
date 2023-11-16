@@ -1,0 +1,22 @@
+{
+  "name": "tree-sitter-xeda-input",
+  "version": "1.0.0",
+  "description": "Tree-sitter parser for XEDA input file",
+  "main": "bindings/node",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "tree-sitter",
+    "xeda",
+    "parser"
+  ],
+  "author": "LXYan2333",
+  "license": "LGPL-3.0-or-later",
+  "dependencies": {
+    "nan": "^2.18.0"
+  },
+  "devDependencies": {
+    "tree-sitter-cli": "^0.20.8"
+  }
+}
