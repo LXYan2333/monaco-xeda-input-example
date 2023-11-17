@@ -14,7 +14,8 @@
 		"rootDir": "src",
 		"skipLibCheck": true,
 		"esModuleInterop": true,
-		"declaration": true
+		"declaration": true,
+		"composite": true,
 	},
 	"include": [
 		"src",

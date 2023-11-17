@@ -136,7 +136,7 @@ export async function attach_monaco_to(elem: HTMLElement, editorText: string, fo
     try {
         console.log("init");
 
-        return await setup_and_run(elem, editorText, fontFamily);
+        return setup_and_run(elem, editorText, fontFamily);
 
     } catch (E) {
         console.log("Failed to attach monaco. Reason:", E);
