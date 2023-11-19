@@ -1,4 +1,6 @@
 import { attach_monaco_to } from "monaco-xeda-input";
+import { attach_molstar_viewer_to } from "xeda-molstar-viewer";
+// import { RequestMessage } from 
 
 
 let a = attach_monaco_to(document.getElementById('app')!, `$ctrl
@@ -29,8 +31,28 @@ $end
 `, 'Fira Code');
 
 
-a.then(editor => {
+
+a.then(({ editor, connection }) => {
     console.log(editor!.getModel()!.getValue());
+    // editor.onDidChangeCursorPosition(e =>
+    //     // worker.postMessage({ type: 'hover', position: { line: e.position.lineNumber - 1, character: e.position.column - 1 } })
+    //     // @ts-ignore
+    //     connection.writer.write({
+    //         // @ts-ignore
+    //         jsonrpc: '2.0', method: 'onCursorChangePosition', params: { line: e.position.lineNumber - 1, character: e.position.column - 1 }
+    //     })
+    // );
+    let molstar = attach_molstar_viewer_to(document.getElementById('viewer')!);
+    molstar.then(molstar => {
+        connection.reader.listen(e => {
+            // @ts-ignore
+            if (e.method === 'set_monomers_and_highlight') {
+                console.log(e)
+                //@ts-ignore
+                molstar.load(e.param.monomer_list, e.param.highlight_index)
+            }
+        })
+    })
 });
 
 // import './vscode-plugins';

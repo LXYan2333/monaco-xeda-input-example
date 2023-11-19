@@ -9,7 +9,7 @@ export default defineConfig(() => {
     plugins: [
       // vsixPlugin()
     ],
-    assetsInclude: ['**/*.wasm', '**/*.vsix'],
+    assetsInclude: ['**/*.wasm'],
     optimizeDeps: {
       esbuildOptions: {
         plugins: [

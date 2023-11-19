@@ -30,6 +30,9 @@
     },
     {
       "path": "./packages/monaco-xeda-input"
+    },
+    {
+      "path": "./packages/xeda-molstar-viewer"
     }
   ]
 }

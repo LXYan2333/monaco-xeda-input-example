@@ -20,7 +20,8 @@
   "workspaces": [
     "packages/tree-sitter-xeda-input",
     "packages/xeda-lsp",
-    "packages/monaco-xeda-input"
+    "packages/monaco-xeda-input",
+    "packages/xeda-molstar-viewer"
   ],
   "dependencies": {
     "firacode": "^6.2.0"

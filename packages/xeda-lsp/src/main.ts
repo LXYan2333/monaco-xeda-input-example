@@ -10,7 +10,7 @@ const connection = LSP.createConnection(messageReader, messageWriter);
 
 connection.onInitialize(
     async (params: LSP.InitializeParams): Promise<LSP.InitializeResult> => {
-        const server = await XEDAServer.initialize(connection, params);
+        const server = await XEDAServer.initialize(connection, params, messageReader, messageWriter);
         server.register(connection)
         return {
             capabilities: server.capabilities(),
@@ -18,4 +18,4 @@ connection.onInitialize(
     },
 )
 
-connection.listen()
+connection.listen();

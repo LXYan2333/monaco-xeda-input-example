@@ -11,6 +11,8 @@ export default class XEDAServer {
     private clientCapabilities: LSP.ClientCapabilities;
     private connection: LSP.Connection;
     private documents: LSP.TextDocuments<TextDocument> = new LSP.TextDocuments(TextDocument);
+    private reader: LSP.BrowserMessageReader;
+    private writer: LSP.BrowserMessageWriter;
     // private linter:Linter
 
 
@@ -18,11 +20,23 @@ export default class XEDAServer {
     private constructor(
         analyzer: Analyzer,
         capabilities: LSP.ClientCapabilities,
-        connection: LSP.Connection
+        connection: LSP.Connection,
+        messageReader: LSP.BrowserMessageReader,
+        messageWriter: LSP.BrowserMessageWriter
     ) {
         this.clientCapabilities = capabilities;
         this.analyzer = analyzer;
         this.connection = connection;
+        this.reader = messageReader;
+        this.writer = messageWriter;
+
+        // this.reader.listen(e => {
+        //     // @ts-ignore
+        //     if (e.method === 'onCursorChangePosition') {
+        //         // @ts-ignore
+        //         this.onCursorMove(e.params, messageWriter)
+        //     }
+        // });
     }
 
     /**
@@ -30,12 +44,14 @@ export default class XEDAServer {
      */
     public static async initialize(
         connection: LSP.Connection,
-        initParams: LSP.InitializeParams
+        initParams: LSP.InitializeParams,
+        messageReader: LSP.BrowserMessageReader,
+        messageWriter: LSP.BrowserMessageWriter
     ): Promise<XEDAServer> {
         const parser = await initParser();
         const analyzer = new Analyzer(parser);
 
-        const server = new XEDAServer(analyzer, initParams.capabilities, connection);
+        const server = new XEDAServer(analyzer, initParams.capabilities, connection, messageReader, messageWriter);
 
         return server
     }
@@ -65,6 +81,7 @@ export default class XEDAServer {
 
         connection.onCompletion(this.completion.bind(this));
 
+        connection.onDocumentHighlight(this.onCursorMove.bind(this));
     }
 
     public async completion(params: LSP.CompletionParams): Promise<LSP.CompletionItem[]> {
@@ -148,6 +165,7 @@ export default class XEDAServer {
         // }
 
         this.connection.sendDiagnostics({ uri, version: document.version, diagnostics })
+        this.onCursorMove(undefined);
     }
 
     /**
@@ -176,7 +194,8 @@ export default class XEDAServer {
                 completionItem: {
                     labelDetailsSupport: false
                 }
-            }
+            },
+            documentHighlightProvider: true,
         }
     }
 
@@ -200,5 +219,44 @@ export default class XEDAServer {
         }
 
         return r;
+    }
+
+    private async onCursorMove(param: LSP.DocumentHighlightParams | undefined): Promise<null> {
+        let monomer_list: string[] = [];
+        let highlight_index = -1;
+        if (this.analyzer.input_file_info.have_eda_section) {
+            this.analyzer.input_file_info.monomer_list.forEach((monomer, i) => {
+                let xyz: string = `${monomer.atom_count}\n\n`;
+                try {
+                    monomer.atom_and_coordinate_list.forEach(atom => {
+                        if (param && param.position.line === atom.node.startPosition.row) {
+                            highlight_index = i;
+                        }
+                        if (isNaN(atom.x) || isNaN(atom.y) || isNaN(atom.z)) {
+                            return
+                        };
+                        xyz += `${atom.name} ${atom.x} ${atom.y} ${atom.z}\n`;
+                    });
+                } catch (e) {
+                    console.log(e);
+                }
+                monomer_list.push(xyz);
+            });
+        } else {
+            let xyz: string = `${this.analyzer.input_file_info.geom.length}\n\n`;
+
+            this.analyzer.input_file_info.geom.forEach(atom => {
+                if (isNaN(atom.x) || isNaN(atom.y) || isNaN(atom.z)) {
+                    return
+                };
+                xyz += `${atom.name} ${atom.x} ${atom.y} ${atom.z}\n`;
+            });
+            monomer_list.push(xyz);
+        }
+        this.writer.write(
+            // @ts-ignore
+            { jsonrpc: '2.0', method: 'set_monomers_and_highlight', param: { monomer_list: monomer_list, highlight_index: highlight_index } })
+
+        return null;
     }
 }

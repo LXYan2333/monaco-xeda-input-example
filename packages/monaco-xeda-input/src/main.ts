@@ -123,7 +123,7 @@ const setup_and_run = async (elem: HTMLElement, editorText: string, fontFamily: 
     languageClient.start();
     reader.onClose(() => languageClient.stop());
 
-    return r;
+    return { editor: r, connection: { reader: reader, writer: writer } };
 };
 
 
@@ -132,13 +132,7 @@ const setup_and_run = async (elem: HTMLElement, editorText: string, fontFamily: 
  * @param editorText 要展示的文本内容
  * @returns 编辑器实例的`Promise`。在`.then`中，通过 `.getModel().getValue()` 异步获取编辑器内容
  */
-export async function attach_monaco_to(elem: HTMLElement, editorText: string, fontFamily: string) {
-    try {
-        console.log("init");
-
-        return setup_and_run(elem, editorText, fontFamily);
-
-    } catch (E) {
-        console.log("Failed to attach monaco. Reason:", E);
-    }
+export async function attach_monaco_to(elem: HTMLElement, editorText: string, fontFamily: string): Promise<{ editor: editor.IStandaloneCodeEditor, connection: { reader: BrowserMessageReader, writer: BrowserMessageWriter } }> {
+    console.log("init");
+    return setup_and_run(elem, editorText, fontFamily);
 }
