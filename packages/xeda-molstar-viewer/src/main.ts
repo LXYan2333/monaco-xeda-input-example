@@ -19,6 +19,8 @@ import { MolScriptBuilder as MS } from 'molstar/lib/mol-script/language/builder'
 
 class MolstarBasicWrapper {
     plugin: PluginUIContext;
+    last_xyz: string[] = [];
+    last_highlight_index: number = -1;
 
     constructor(plugin: PluginUIContext) {
         this.plugin = plugin;
@@ -65,48 +67,58 @@ class MolstarBasicWrapper {
     }
 
     async load(xyz_list: string[], highlight_index: number) {
-        await this.plugin.clear(false);
 
-        function chainSelection(auth_asym_id: string) {
-            return MS.struct.generator.atomGroups({
-                'chain-test': MS.core.rel.eq([MS.struct.atomProperty.macromolecular.auth_asym_id(), auth_asym_id])
-            });
+        update_structure: {
+            if (xyz_list.map((xyz, i) => xyz === this.last_xyz[i]).reduce((a, b) => a && b)) {
+                break update_structure;
+            }
+            await this.plugin.clear(false);
+
+            this.last_xyz = xyz_list;
+
+            // const data = await this.plugin.builders.data.download({ url: Asset.Url(url), isBinary }, { state: { isGhost: true } });
+            await Promise.all(xyz_list.map(async xyz => {
+                const data = await this.plugin.builders.data.rawData({
+                    data: xyz, label: 'test'
+                }, { state: { isGhost: true } });
+                const trajectory = await this.plugin.builders.structure.parseTrajectory(data, 'xyz');
+                const model = await this.plugin.builders.structure.createModel(trajectory);
+                const structure = await this.plugin.builders.structure.createStructure(model, void 0);
+
+                return await this.plugin.builders.structure.tryCreateComponentStatic(structure, 'all');
+                // if (chain) await this.plugin.builders.structure.representation.addRepresentation(chain, { type: 'ball-and-stick' });
+            })).then(chains => {
+                return Promise.all(chains.map(chain => {
+                    if (chain) {
+                        return this.plugin.builders.structure.representation.addRepresentation(chain, { type: 'ball-and-stick' });
+                    }
+                    return;
+                }))
+            })
         }
 
-        // const data = await this.plugin.builders.data.download({ url: Asset.Url(url), isBinary }, { state: { isGhost: true } });
-        Promise.all(xyz_list.map(async xyz => {
-            console.log(xyz);
-            const data = await this.plugin.builders.data.rawData({
-                data: xyz, label: 'test'
-            }, { state: { isGhost: true } });
-            const trajectory = await this.plugin.builders.structure.parseTrajectory(data, 'xyz');
-            const model = await this.plugin.builders.structure.createModel(trajectory);
-            console.log(model);
-            const structure = await this.plugin.builders.structure.createStructure(model, void 0);
+        if (highlight_index === this.last_highlight_index) {
+            return;
+        };
 
-            return await this.plugin.builders.structure.tryCreateComponentStatic(structure, 'all');
-            // if (chain) await this.plugin.builders.structure.representation.addRepresentation(chain, { type: 'ball-and-stick' });
-        })).then(chains => {
-            return Promise.all(chains.map(chain => {
-                if (chain) {
-                    return this.plugin.builders.structure.representation.addRepresentation(chain, { type: 'ball-and-stick' });
-                }
-                return;
-            }))
-        }).then(() => {
-            if (highlight_index === -1) return;
+        this.last_highlight_index = highlight_index;
 
-            const data3 = this.plugin.managers.structure.hierarchy.current.structures[highlight_index]?.cell.obj?.data;
-            if (!data3) return;
+        if (highlight_index === -1) {
+            this.plugin.managers.interactivity.lociHighlights.clearHighlights();
+            return;
+        }
 
-            const seq_id = 1;
-            const sel = Script.getStructureSelection(Q => Q.struct.generator.atomGroups({
-                'residue-test': Q.core.rel.eq([Q.struct.atomProperty.macromolecular.label_seq_id(), seq_id]),
-                'group-by': Q.struct.atomProperty.macromolecular.residueKey()
-            }), data3);
-            const loci = StructureSelection.toLociWithSourceUnits(sel);
-            this.plugin.managers.interactivity.lociHighlights.highlightOnly({ loci });
-        });
+        const data3 = this.plugin.managers.structure.hierarchy.current.structures[highlight_index]?.cell.obj?.data;
+        if (!data3) return;
+
+        const seq_id = 1;
+        const sel = Script.getStructureSelection(Q => Q.struct.generator.atomGroups({
+            'residue-test': Q.core.rel.eq([Q.struct.atomProperty.macromolecular.label_seq_id(), seq_id]),
+            'group-by': Q.struct.atomProperty.macromolecular.residueKey()
+        }), data3);
+        const loci = StructureSelection.toLociWithSourceUnits(sel);
+        this.plugin.managers.interactivity.lociHighlights.highlightOnly({ loci });
+
 
     }
 
