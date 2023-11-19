@@ -68,7 +68,7 @@ export default class XEDAServer {
     }
 
     public async completion(params: LSP.CompletionParams): Promise<LSP.CompletionItem[]> {
-        let r: LSP.CompletionItem[] = [{ label: '123' }];
+        let r: LSP.CompletionItem[] = [];
         try {
             this.analyzer.analyze(this.documents.get(params.textDocument.uri)!);
             let character = params.position.character;
@@ -79,7 +79,6 @@ export default class XEDAServer {
                 });
                 let choosed_node = IUtil.findParent(node, n => this.analyzer.completion_info_list.some(e => e.node.equals(n)));
                 // console.log(choosed_node)
-                let keyword = this.analyzer.hover_info_list.find(e => e.node.equals(choosed_node!));
                 r.push(... this.analyzer.completion_info_list.find(e => e.node.equals(choosed_node!))!.get_completion_info());
             }
         } catch (e) {
