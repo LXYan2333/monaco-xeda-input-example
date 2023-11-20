@@ -367,6 +367,21 @@ ${fuse_search_result.length === 0 ? '' : `Did you mean ${fuse_search_result[0].i
                 });
             }
 
+            // 单体电荷之和是否与超分子相等？
+            {
+                let all_monomer_charge = this.input_file_info.mcharge.reduce((a, b) => a + b);
+                let supermolecule_charge = this.input_file_info.charge;
+                if (!isNaN(all_monomer_charge) && !isNaN(supermolecule_charge) && all_monomer_charge !== supermolecule_charge) {
+                    diagnostics.push({
+                        range: IUtil.range(eda_keywords.filter(e => e.name === 'mcharge')[0].node),
+                        severity: LSP.DiagnosticSeverity.Error,
+                        code: 'wrong-mcharge',
+                        source: 'XEDA diagnose',
+                        message: `The sum of the charges of all the monomers is ${all_monomer_charge}, but the charge of the supermolecule is ${supermolecule_charge}.`,
+                    })
+                }
+            }
+
             let spin_count: { α_spin_electron_count: number, β_spin_electron_count: number }[] = [];
             for (let i = 0; i < this.input_file_info.nmol; i++) {
                 try {
