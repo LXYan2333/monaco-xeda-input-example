@@ -42,7 +42,8 @@ a.then(({ editor, connection }) => {
             jsonrpc: '2.0', method: 'onCursorChangePosition', param: { line: e.position.lineNumber - 1, character: e.position.column - 1 }
         })
     );
-    let molstar = attach_molstar_viewer_to(document.getElementById('viewer')!);
+    let viewer = document.getElementById('viewer')!;
+    let molstar = attach_molstar_viewer_to(viewer);
     molstar.then(molstar => {
         connection.reader.listen(e => {
             // @ts-ignore
@@ -50,7 +51,8 @@ a.then(({ editor, connection }) => {
                 //@ts-ignore
                 molstar.load(e.param.monomer_list, e.param.highlight_index)
             }
-        })
+        });
+        viewer.addEventListener('resize', (() => { molstar.plugin.handleResize(); }))
     })
 });
 

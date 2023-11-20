@@ -77,7 +77,7 @@ class MolstarBasicWrapper {
             this.last_xyz = xyz_list;
 
             // const data = await this.plugin.builders.data.download({ url: Asset.Url(url), isBinary }, { state: { isGhost: true } });
-            await Promise.all(xyz_list.map(async xyz => {
+            let chains = await Promise.all(xyz_list.map(async xyz => {
                 const data = await this.plugin.builders.data.rawData({
                     data: xyz, label: 'test'
                 }, { state: { isGhost: true } });
@@ -85,41 +85,38 @@ class MolstarBasicWrapper {
                 const model = await this.plugin.builders.structure.createModel(trajectory);
                 const structure = await this.plugin.builders.structure.createStructure(model, void 0);
 
-                return await this.plugin.builders.structure.tryCreateComponentStatic(structure, 'all');
+                return this.plugin.builders.structure.tryCreateComponentStatic(structure, 'all');
                 // if (chain) await this.plugin.builders.structure.representation.addRepresentation(chain, { type: 'ball-and-stick' });
-            })).then(chains => {
-                return Promise.all(chains.map(chain => {
-                    if (chain) {
-                        return this.plugin.builders.structure.representation.addRepresentation(chain, { type: 'ball-and-stick' });
-                    }
-                    return;
-                }))
-            })
+            }));
+
+
+            await Promise.all(chains.map(chain => {
+                if (chain) {
+                    return this.plugin.builders.structure.representation.addRepresentation(chain, { type: 'ball-and-stick' });
+                }
+                return;
+            }));
+
+            this.plugin.managers.camera.reset();
         }
 
-        // if (highlight_index === this.last_highlight_index) {
-        //     return;
-        // };
+        update_highlight: {
+            if (highlight_index === -1) {
+                this.plugin.managers.interactivity.lociHighlights.clearHighlights();
+                break update_highlight;
+            }
 
-        // this.last_highlight_index = highlight_index;
+            const data3 = this.plugin.managers.structure.hierarchy.current.structures[highlight_index]?.cell.obj?.data;
+            if (!data3) break update_highlight;
 
-        if (highlight_index === -1) {
-            this.plugin.managers.interactivity.lociHighlights.clearHighlights();
-            return;
+            const seq_id = 1;
+            const sel = Script.getStructureSelection(Q => Q.struct.generator.atomGroups({
+                'residue-test': Q.core.rel.eq([Q.struct.atomProperty.macromolecular.label_seq_id(), seq_id]),
+                'group-by': Q.struct.atomProperty.macromolecular.residueKey()
+            }), data3);
+            const loci = StructureSelection.toLociWithSourceUnits(sel);
+            this.plugin.managers.interactivity.lociHighlights.highlightOnly({ loci });
         }
-
-        const data3 = this.plugin.managers.structure.hierarchy.current.structures[highlight_index]?.cell.obj?.data;
-        if (!data3) return;
-
-        const seq_id = 1;
-        const sel = Script.getStructureSelection(Q => Q.struct.generator.atomGroups({
-            'residue-test': Q.core.rel.eq([Q.struct.atomProperty.macromolecular.label_seq_id(), seq_id]),
-            'group-by': Q.struct.atomProperty.macromolecular.residueKey()
-        }), data3);
-        const loci = StructureSelection.toLociWithSourceUnits(sel);
-        this.plugin.managers.interactivity.lociHighlights.highlightOnly({ loci });
-
-
     }
 
 }
