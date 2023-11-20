@@ -166,7 +166,7 @@ A list giving the number of atoms in each monomer. The ordering of atoms in \`$G
 }
 
 export class Mmult extends MultiInt {
-    range: KW.int_range = '>0';
+    range: KW.int_range = 'any';
     markdown_hover_info: string = `## MMULT
 
 A list giving the multiplicity of each monomer. A positive integer means α spin, a negative integer means β spin. Numbers should be seperated by space.

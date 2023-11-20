@@ -8,6 +8,7 @@ import * as IFI from './util/input_file_info';
 import { AtomAndCoordiante } from './util/sections/geo/atom_and_coordinates';
 import * as EKW from './util/sections/eda/eda_keywords';
 import * as SE from './util/sections/section';
+import { multiplicity } from './util/multiplicity_check';
 
 export default class Analyzer {
     private parser: Parser;
@@ -59,8 +60,8 @@ export default class Analyzer {
 
         // $CTR
         let parsed_keywords: KW.Keyword[] = [];
+        let ctr_section = tree.rootNode.children.filter((node) => node.type === 'ctr_section');
         ctr: {
-            let ctr_section = tree.rootNode.children.filter((node) => node.type === 'ctr_section');
 
             // $CTR 部分缺失
             if (ctr_section.length === 0) {
@@ -201,7 +202,7 @@ ${fuse_search_result.length === 0 ? '' : `Did you mean ${fuse_search_result[0].i
 
             IUtil.childOfType(IUtil.childOfType(geo_section[0], ['geo_item_list'])[0], ['geo_item']).forEach(
                 geo_item => {
-                    atom_and_coordiantes_list.push(new AtomAndCoordiante('', geo_item, tree.rootNode, this.input_file_info))
+                    atom_and_coordiantes_list.push(new AtomAndCoordiante('', geo_item, tree.rootNode, this.input_file_info));
                 }
             );
             atom_and_coordiantes_list.forEach(e => {
@@ -366,27 +367,96 @@ ${fuse_search_result.length === 0 ? '' : `Did you mean ${fuse_search_result[0].i
                 });
             }
 
+            let spin_count: { α_spin_electron_count: number, β_spin_electron_count: number }[] = [];
             for (let i = 0; i < this.input_file_info.nmol; i++) {
                 try {
+                    let atom_and_coordinate_list = this.input_file_info.geom.slice(
+                        this.input_file_info.matom.slice(0, i).reduce((a, b) => a + b, 0),
+                        this.input_file_info.matom.slice(0, i + 1).reduce((a, b) => a + b, 0)
+                    );
+                    let nuclear_charge = atom_and_coordiantes_list.map(e => IFI.get_atom_nuclear_charge(e.atom!)).reduce((a, b) => a + b);
                     this.input_file_info.monomer_list.push({
                         index: i,
-                        atom_and_coordinate_list: this.input_file_info.geom.slice(
-                            this.input_file_info.matom.slice(0, i).reduce((a, b) => a + b, 0),
-                            this.input_file_info.matom.slice(0, i + 1).reduce((a, b) => a + b, 0)
-                        ),
+                        atom_and_coordinate_list: atom_and_coordinate_list,
                         atom_count: this.input_file_info.matom[i],
                         charge: this.input_file_info.mcharge[i],
-                        mult: this.input_file_info.mmult[i]
+                        mult: this.input_file_info.mmult[i],
+                        nuclear_charge: nuclear_charge
                     });
+                    // 单体的电荷和自旋多重度是否正确？
+                    let check_result = multiplicity(nuclear_charge, this.input_file_info.mcharge[i], this.input_file_info.mmult[i]);
+                    if (check_result === false) {
+                        diagnostics.push({
+                            range: IUtil.range(eda_keywords.filter(e => e.name === 'mmult')[0].node.children[i + 2]),
+                            severity: LSP.DiagnosticSeverity.Error,
+                            code: 'wrong-multiplicity',
+                            source: 'XEDA diagnose',
+                            message: `The charge and multiplicity of monomer ${i + 1} is not valid!`,
+                        });
+                        spin_count.push({ α_spin_electron_count: NaN, β_spin_electron_count: NaN });
+                    } else {
+                        spin_count.push(check_result);
+                    }
                 } catch (e) {
                     this.cowsayOops();
                     console.log(e);
                 }
             }
+
+            // 单体的单电子数之和是否等于超分子的单电子数？
+            try {
+                let all_monomer_α_spin_electron_count = spin_count.map(e => e.α_spin_electron_count).reduce((a, b) => a + b);
+                let all_monomer_β_spin_electron_count = spin_count.map(e => e.β_spin_electron_count).reduce((a, b) => a + b);
+                let all_unpaired_electron_count = Math.abs(all_monomer_α_spin_electron_count + all_monomer_β_spin_electron_count);
+                if (this.input_file_info.nmul !== all_unpaired_electron_count + 1) {
+                    diagnostics.push({
+                        range: IUtil.range(eda_keywords.filter(e => e.name === 'mmult')[0].node),
+                        severity: LSP.DiagnosticSeverity.Error,
+                        code: 'wrong-nmul',
+                        source: 'XEDA diagnose',
+                        message: `There ${all_unpaired_electron_count === 1 ? 'is' : 'are'} ${all_unpaired_electron_count} unpaired electron${all_unpaired_electron_count === 1 ? '' : 's'} in all the monomers, but there ${this.input_file_info.nmul - 1 === 1 ? 'is' : 'are'} ${this.input_file_info.nmul - 1} unpaired electron in the supermolecule according to the NMUL keyword.`,
+                    });
+                }
+            } catch (e) {
+                this.cowsayOops();
+                console.log(e);
+            }
+
         }// EDA
 
         this.hover_info_list.push(...parsed_keywords, ...eda_keywords);
         this.completion_info_list.push(...parsed_keywords, ...eda_keywords);
+
+        // 体系的自旋多重度是否正确？
+        try {
+            if (multiplicity(this.input_file_info.nuclear_charge, this.input_file_info.charge, this.input_file_info.nmul) === false) {
+                diagnostics.push({
+                    range: IUtil.range(parsed_keywords.filter(e => e.name === 'nmul')[0].node),
+                    severity: LSP.DiagnosticSeverity.Error,
+                    code: 'wrong-multiplicity',
+                    source: 'XEDA diagnose',
+                    message: `The charge and multiplicity of the supermolecule is not valid!`,
+                })
+            }
+        } catch (e) {
+            this.cowsayOops();
+            console.log(e);
+        }
+
+        // 是否使用了正确的HF方法？
+        try {
+            if (this.input_file_info.nmul !== 1 && this.input_file_info.method?.toLowerCase() === 'rhf') {
+                diagnostics.push({
+                    range: IUtil.range(parsed_keywords.filter(e => e.name === 'method')[0].node),
+                    severity: LSP.DiagnosticSeverity.Error,
+                    code: 'wrong-method',
+                    source: 'XEDA diagnose',
+                    message: `RHF method cannot be used in a system with unpaired electrons!`,
+                });
+            }
+        } catch (e) {
+            console.log(e);
+        }
 
 
         // console.log(this.input_file_info);

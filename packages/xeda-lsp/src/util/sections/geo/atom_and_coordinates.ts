@@ -25,6 +25,7 @@ export class AtomAndCoordiante extends OneLineToken {
             z: this.z,
             node: geo_item
         })
+        this.input_file_info.nuclear_charge += IFI.get_atom_nuclear_charge(this.atom!);
     }
 
     get_diagnostic() {
