@@ -408,7 +408,7 @@ ${fuse_search_result.length === 0 ? '' : `Did you mean ${fuse_search_result[0].i
                 let all_monomer_α_spin_electron_count = spin_count.map(e => e.α_spin_electron_count).reduce((a, b) => a + b);
                 let all_monomer_β_spin_electron_count = spin_count.map(e => e.β_spin_electron_count).reduce((a, b) => a + b);
                 let all_unpaired_electron_count = Math.abs(all_monomer_α_spin_electron_count + all_monomer_β_spin_electron_count);
-                if (this.input_file_info.nmul !== all_unpaired_electron_count + 1) {
+                if (!isNaN(all_unpaired_electron_count) && this.input_file_info.nmul !== all_unpaired_electron_count + 1) {
                     diagnostics.push({
                         range: IUtil.range(eda_keywords.filter(e => e.name === 'mmult')[0].node),
                         severity: LSP.DiagnosticSeverity.Error,
