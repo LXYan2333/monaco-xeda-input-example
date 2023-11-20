@@ -173,7 +173,7 @@ A list giving the multiplicity of each monomer. A positive integer means α spin
     
 ### Tip
 
-The summation of \`MMULT\` should be equal to the total multiplicity specified in \`NMUL=n\`. For example, if an ethane molecule is separated into two neutral CH3 groups, MMULT should be specified as \`MMULT=2 -2\` or \`MMULT=-2 2\`.`;
+The summation of \`MMULT\` should be equal to the total multiplicity specified in \`NMUL=n\`. For example, if an ethane molecule is separated into two neutral CH₃ groups, MMULT should be specified as \`MMULT=2 -2\` or \`MMULT=-2 2\`.`;
 
     constructor(name: string, node: Parser.SyntaxNode, root_node: Parser.SyntaxNode, input_file_info: IFI.input_file_info) {
         super(name, node, root_node, input_file_info);
