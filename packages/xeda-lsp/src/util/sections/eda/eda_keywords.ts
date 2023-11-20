@@ -9,7 +9,7 @@ import * as IUtil from '../../tree-sitter';
 export const eda_keywords_list: string[] = ['nmol', 'method', 'matom', 'mmult', 'mcharge'];
 
 export class Nmol extends KW.OneInt {
-    range: KW.int_range = '>=0';
+    range: KW.int_range = '>1';
     markdown_hover_info: string = `## NMOL
 
 Number of monomers.`;

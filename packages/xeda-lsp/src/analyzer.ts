@@ -331,17 +331,6 @@ ${fuse_search_result.length === 0 ? '' : `Did you mean ${fuse_search_result[0].i
                 });
             }
 
-            // nmol是否为1？
-            if (this.input_file_info.nmol === 1) {
-                diagnostics.push({
-                    range: IUtil.range(eda_keywords.filter(e => e.name === 'nmol')[0].node),
-                    severity: LSP.DiagnosticSeverity.Error,
-                    code: 'wrong-nmol',
-                    source: 'XEDA diagnose',
-                    message: `NMOL should be larger 1!`,
-                });
-            }
-
             // matom 中分子数是否与 nmol 相等？
             if (this.input_file_info.matom.length !== this.input_file_info.nmol) {
                 let monomer_count = this.input_file_info.matom.length;

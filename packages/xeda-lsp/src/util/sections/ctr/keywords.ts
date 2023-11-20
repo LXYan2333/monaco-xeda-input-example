@@ -10,7 +10,7 @@ export const keywords_list: string[] = ['method', 'basis', 'charge', 'nmul', 'df
 
 export const no_param_list: string[] = []
 
-export type int_range = '>0' | '>=0' | '<0' | '<=0' | 'any'
+export type int_range = '>0' | '>=0' | '<0' | '<=0' | '>1' | 'any'
 
 export interface get_completion_info {
     node: Parser.SyntaxNode;
@@ -65,7 +65,7 @@ abstract class OneParam extends Keyword {
                 severity: LSP.DiagnosticSeverity.Error,
                 code: 'wrong-param',
                 source: 'XEDA diagnose',
-                message: `${this.name.toUpperCase()} should have 1 parameter, but ${this.node.namedChildCount - 1} are given!`
+                message: `${this.name.toUpperCase()} should have 1 parameter, but ${this.node.namedChildCount - 1} parameter are given!`
             });
         }
 
@@ -76,7 +76,7 @@ abstract class OneParam extends Keyword {
                 severity: LSP.DiagnosticSeverity.Error,
                 code: 'wrong-param',
                 source: 'XEDA diagnose',
-                message: `${this.name.toUpperCase()} should have only 1 parameter, but ${this.node.namedChildCount - 1} are given!`
+                message: `${this.name.toUpperCase()} should have only 1 parameter, but ${this.node.namedChildCount - 1} parameters are given!`
             });
         }
 
@@ -165,7 +165,17 @@ export abstract class OneInt extends OneParam {
                     });
                 }
                 break;
-
+            case '>1':
+                if (this.content <= 1) {
+                    r.push({
+                        range: IUtil.range(this.node.children[2]),
+                        severity: LSP.DiagnosticSeverity.Error,
+                        code: 'wrong-param',
+                        source: 'XEDA diagnose',
+                        message: `Parameter for ${this.name.toUpperCase()} should be larger than 1!`
+                    });
+                }
+                break;
             default:
                 break;
         }
