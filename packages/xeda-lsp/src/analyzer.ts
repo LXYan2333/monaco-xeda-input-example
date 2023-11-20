@@ -475,6 +475,22 @@ ${fuse_search_result.length === 0 ? '' : `Did you mean ${fuse_search_result[0].i
             console.log(e);
         }
 
+        // $ token是否独占一行
+        IUtil.forEach(tree.rootNode, (node) => {
+            if (['ctr_start_token', 'end_token', 'geo_start_token', 'eda_start_token'].includes(node.type)) {
+                let line = node.startPosition.row;
+                if (lines[line].trim() !== node.text) {
+                    diagnostics.push({
+                        range: IUtil.range(node),
+                        severity: LSP.DiagnosticSeverity.Error,
+                        code: 'syntax-error',
+                        source: 'XEDA diagnose',
+                        message: `The ${node.text} token should occupy a whole line.`,
+                    })
+                }
+            }
+        })
+
 
         // console.log(this.input_file_info);
         return diagnostics
