@@ -21,5 +21,9 @@
   },
   "devDependencies": {
     "typescript": "^5.2.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LXYan2333/monaco-xeda-input-example.git"
   }
 }

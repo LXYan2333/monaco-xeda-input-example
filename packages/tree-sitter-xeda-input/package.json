@@ -18,5 +18,9 @@
   },
   "devDependencies": {
     "tree-sitter-cli": "^0.20.8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LXYan2333/monaco-xeda-input-example.git"
   }
 }

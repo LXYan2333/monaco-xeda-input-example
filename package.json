@@ -25,5 +25,9 @@
   ],
   "dependencies": {
     "firacode": "^6.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LXYan2333/monaco-xeda-input-example.git"
   }
 }

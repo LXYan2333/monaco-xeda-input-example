@@ -14,5 +14,9 @@
   "license": "LGPL-3.0-or-later",
   "dependencies": {
     "molstar": "^3.42.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LXYan2333/monaco-xeda-input-example.git"
   }
 }
