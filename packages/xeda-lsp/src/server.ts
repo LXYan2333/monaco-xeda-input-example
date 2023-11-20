@@ -81,7 +81,14 @@ export default class XEDAServer {
 
         connection.onCompletion(this.completion.bind(this));
 
-        connection.onDocumentHighlight(this.onCursorMove.bind(this));
+        this.reader.listen(e => {
+            // @ts-ignore
+            if (e.method === 'onCursorChangePosition') {
+                // @ts-ignore
+                this.onCursorMove(e.param);
+            }
+        })
+
     }
 
     public async completion(params: LSP.CompletionParams): Promise<LSP.CompletionItem[]> {
@@ -165,7 +172,7 @@ export default class XEDAServer {
         // }
 
         this.connection.sendDiagnostics({ uri, version: document.version, diagnostics })
-        this.onCursorMove(undefined);
+        this.onCursorMove();
     }
 
     /**
@@ -195,7 +202,6 @@ export default class XEDAServer {
                     labelDetailsSupport: false
                 }
             },
-            documentHighlightProvider: true,
         }
     }
 
@@ -221,7 +227,7 @@ export default class XEDAServer {
         return r;
     }
 
-    private async onCursorMove(param: LSP.DocumentHighlightParams | undefined): Promise<null> {
+    private async onCursorMove(param?: { line: number, character: number }): Promise<null> {
         let monomer_list: string[] = [];
         let highlight_index = -1;
         if (this.analyzer.input_file_info.have_eda_section) {
@@ -229,7 +235,7 @@ export default class XEDAServer {
                 let xyz: string = `${monomer.atom_count}\n\n`;
                 try {
                     monomer.atom_and_coordinate_list.forEach(atom => {
-                        if (param && param.position.line === atom.node.startPosition.row) {
+                        if (param && param.line === atom.node.startPosition.row) {
                             highlight_index = i;
                         }
                         if (isNaN(atom.x) || isNaN(atom.y) || isNaN(atom.z)) {

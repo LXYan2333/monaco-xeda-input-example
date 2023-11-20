@@ -20,7 +20,7 @@ import { MolScriptBuilder as MS } from 'molstar/lib/mol-script/language/builder'
 class MolstarBasicWrapper {
     plugin: PluginUIContext;
     last_xyz: string[] = [];
-    last_highlight_index: number = -1;
+    // last_highlight_index: number = -1;
 
     constructor(plugin: PluginUIContext) {
         this.plugin = plugin;
@@ -97,11 +97,11 @@ class MolstarBasicWrapper {
             })
         }
 
-        if (highlight_index === this.last_highlight_index) {
-            return;
-        };
+        // if (highlight_index === this.last_highlight_index) {
+        //     return;
+        // };
 
-        this.last_highlight_index = highlight_index;
+        // this.last_highlight_index = highlight_index;
 
         if (highlight_index === -1) {
             this.plugin.managers.interactivity.lociHighlights.clearHighlights();
