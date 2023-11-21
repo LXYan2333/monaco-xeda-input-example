@@ -218,9 +218,15 @@ export default class XEDAServer {
                 column: params.position.character
             });
             let choosed_node = IUtil.findParent(node, n => this.analyzer.hover_info_list.some(e => e.node.equals(n)));
-            if (isPositionIncludedInRange(params.position, IUtil.range(choosed_node!.children[0]!))) {
-                let keyword = this.analyzer.hover_info_list.find(e => e.node.equals(choosed_node!));
-                r = keyword!.get_hover_info();
+            // 新加 Hover info 需要注意这里的逻辑，这里的逻辑为了实现只有鼠标在 keyword 的等号前面时才显示 hover info，让仅光标在 keyword 的第一个子节点才添加 hover info,
+            // 可能对未来新加的有严重影响。
+            // （确实逻辑写得不好……应该把keyword类进一步划分的）
+            if (choosed_node) {
+                if (choosed_node.children[0] && isPositionIncludedInRange(params.position, IUtil.range(choosed_node!.children[0]))
+                    || choosed_node.childCount === 0) {
+                    let keyword = this.analyzer.hover_info_list.find(e => e.node.equals(choosed_node!));
+                    r = keyword!.get_hover_info();
+                }
             }
         } catch (e) {
             console.log(e)
