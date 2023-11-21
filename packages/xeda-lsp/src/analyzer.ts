@@ -184,7 +184,7 @@ ${fuse_search_result.length === 0 ? '' : `Did you mean ${fuse_search_result[0].i
         }// $CTR
 
         // $GEOM
-        let atom_and_coordiantes_list: AtomAndCoordiante[] = []
+        let atom_and_coordinates_list_of_geo_section: AtomAndCoordiante[] = []
         geom: {
             let geo_section = tree.rootNode.children.filter((node) => node.type === 'geo_section');
 
@@ -202,10 +202,10 @@ ${fuse_search_result.length === 0 ? '' : `Did you mean ${fuse_search_result[0].i
 
             IUtil.childOfType(IUtil.childOfType(geo_section[0], ['geo_item_list'])[0], ['geo_item']).forEach(
                 geo_item => {
-                    atom_and_coordiantes_list.push(new AtomAndCoordiante('', geo_item, tree.rootNode, this.input_file_info));
+                    atom_and_coordinates_list_of_geo_section.push(new AtomAndCoordiante('', geo_item, tree.rootNode, this.input_file_info));
                 }
             );
-            atom_and_coordiantes_list.forEach(e => {
+            atom_and_coordinates_list_of_geo_section.forEach(e => {
                 diagnostics.push(...e.get_diagnostic());
             });
         }// $GEOM
