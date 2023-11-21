@@ -1,20 +1,12 @@
-import { PDBeStructureQualityReport } from 'molstar/lib/extensions/pdbe';
-import { EmptyLoci } from 'molstar/lib/mol-model/loci';
 import { StructureSelection } from 'molstar/lib/mol-model/structure';
-import { AnimateModelIndex } from 'molstar/lib/mol-plugin-state/animation/built-in/model-index';
-import { BuiltInTrajectoryFormat } from 'molstar/lib/mol-plugin-state/formats/trajectory';
 import { createPluginUI } from 'molstar/lib/mol-plugin-ui/react18';
 import { PluginUIContext } from 'molstar/lib/mol-plugin-ui/context';
 import { DefaultPluginUISpec } from 'molstar/lib/mol-plugin-ui/spec';
 import { PluginCommands } from 'molstar/lib/mol-plugin/commands';
 import { Script } from 'molstar/lib/mol-script/script';
-import { Asset } from 'molstar/lib/mol-util/assets';
 import { Color } from 'molstar/lib/mol-util/color';
 import { StripedResidues } from 'molstar/lib/examples/basic-wrapper/coloring';
-import { CustomToastMessage } from 'molstar/lib/examples/basic-wrapper/controls';
 import { CustomColorThemeProvider } from 'molstar/lib/examples/basic-wrapper/custom-theme';
-import { buildStaticSuperposition, dynamicSuperpositionTest, StaticSuperpositionTestData } from 'molstar/lib/examples/basic-wrapper/superposition';
-import { MolScriptBuilder as MS } from 'molstar/lib/mol-script/language/builder';
 
 
 class MolstarBasicWrapper {

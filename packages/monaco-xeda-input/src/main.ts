@@ -3,7 +3,7 @@ import { MonacoLanguageClient, initServices, useOpenEditorStub } from 'monaco-la
 import { BrowserMessageReader, BrowserMessageWriter } from 'vscode-languageserver-protocol/browser.js';
 import { CloseAction, ErrorAction, MessageTransports } from 'vscode-languageclient';
 import { createConfiguredEditor } from 'vscode/monaco';
-import { ExtensionHostKind, registerExtension, initialize } from 'vscode/extensions';
+import { ExtensionHostKind, registerExtension } from 'vscode/extensions';
 import getConfigurationServiceOverride, { updateUserConfiguration } from '@codingame/monaco-vscode-configuration-service-override';
 import getEditorServiceOverride from '@codingame/monaco-vscode-editor-service-override';
 import getKeybindingsServiceOverride from '@codingame/monaco-vscode-keybindings-service-override';
