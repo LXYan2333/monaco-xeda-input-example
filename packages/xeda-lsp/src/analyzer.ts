@@ -391,7 +391,6 @@ ${fuse_search_result.length === 0 ? '' : `Did you mean ${fuse_search_result[0].i
                         this.input_file_info.matom.slice(0, i).reduce((a, b) => a + b, 0),
                         this.input_file_info.matom.slice(0, i + 1).reduce((a, b) => a + b, 0)
                     );
-                    console.log(atom_and_coordinate_list);
                     let nuclear_charge = atom_and_coordinate_list.map(e => IFI.get_atom_nuclear_charge(e.name!)).reduce((a, b) => a + b, 0);
                     this.input_file_info.monomer_list.push({
                         index: i,
