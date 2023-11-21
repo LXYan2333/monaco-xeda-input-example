@@ -47,7 +47,7 @@ The monaco editor is attached to the `editor` div, and the molstar viewer is att
 
 ## contribution
 
-Contribution is NOT welcomed.
+Personal project. Contribution is **NOT** welcomed.
 
 ## license
 
