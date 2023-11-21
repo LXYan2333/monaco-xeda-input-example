@@ -5,6 +5,7 @@ import { initParser } from "./parser";
 import { get_semantic_tokens, tokenTypes } from "./semantic_token";
 // import { Linter, LintingResult } from './shellcheck'
 import * as IUtil from './util/tree-sitter';
+import { isPositionIncludedInRange } from "./util/range";
 
 export default class XEDAServer {
     private analyzer: Analyzer;
@@ -217,9 +218,10 @@ export default class XEDAServer {
                 column: params.position.character
             });
             let choosed_node = IUtil.findParent(node, n => this.analyzer.hover_info_list.some(e => e.node.equals(n)));
-            // console.log(choosed_node)
-            let keyword = this.analyzer.hover_info_list.find(e => e.node.equals(choosed_node!));
-            r = keyword!.get_hover_info();
+            if (isPositionIncludedInRange(params.position, IUtil.range(choosed_node!.children[0]!))) {
+                let keyword = this.analyzer.hover_info_list.find(e => e.node.equals(choosed_node!));
+                r = keyword!.get_hover_info();
+            }
         } catch (e) {
             console.log(e)
         }
