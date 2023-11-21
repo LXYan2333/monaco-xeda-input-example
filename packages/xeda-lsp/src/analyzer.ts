@@ -391,7 +391,8 @@ ${fuse_search_result.length === 0 ? '' : `Did you mean ${fuse_search_result[0].i
                         this.input_file_info.matom.slice(0, i).reduce((a, b) => a + b, 0),
                         this.input_file_info.matom.slice(0, i + 1).reduce((a, b) => a + b, 0)
                     );
-                    let nuclear_charge = atom_and_coordiantes_list.map(e => IFI.get_atom_nuclear_charge(e.atom!)).reduce((a, b) => a + b);
+                    console.log(atom_and_coordinate_list);
+                    let nuclear_charge = atom_and_coordinate_list.map(e => IFI.get_atom_nuclear_charge(e.name!)).reduce((a, b) => a + b, 0);
                     this.input_file_info.monomer_list.push({
                         index: i,
                         atom_and_coordinate_list: atom_and_coordinate_list,
@@ -408,7 +409,7 @@ ${fuse_search_result.length === 0 ? '' : `Did you mean ${fuse_search_result[0].i
                             severity: LSP.DiagnosticSeverity.Error,
                             code: 'wrong-multiplicity',
                             source: 'XEDA diagnose',
-                            message: `The charge and multiplicity of monomer ${i + 1} is not valid!`,
+                            message: `The charge and multiplicity of monomer ${i + 1} is not valid!${nuclear_charge} ${this.input_file_info.mcharge[i]} ${this.input_file_info.mmult[i]}`,
                         });
                         spin_count.push({ α_spin_electron_count: NaN, β_spin_electron_count: NaN });
                     } else {
