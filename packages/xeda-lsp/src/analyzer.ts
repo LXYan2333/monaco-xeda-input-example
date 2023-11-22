@@ -408,7 +408,7 @@ ${fuse_search_result.length === 0 ? '' : `Did you mean ${fuse_search_result[0].i
                             severity: LSP.DiagnosticSeverity.Error,
                             code: 'wrong-multiplicity',
                             source: 'XEDA diagnose',
-                            message: `The charge and multiplicity of monomer ${i + 1} is not valid!${nuclear_charge} ${this.input_file_info.mcharge[i]} ${this.input_file_info.mmult[i]}`,
+                            message: `The charge and multiplicity of monomer ${i + 1} is not valid!`,
                         });
                         spin_count.push({ α_spin_electron_count: NaN, β_spin_electron_count: NaN });
                     } else {
