@@ -45,8 +45,9 @@ a.then(({ editor, connection }) => {
     share_button.addEventListener('click', () => {
         let url = new URL(window.location.href);
         url.searchParams.set('input-file', editor!.getModel()!.getValue());
-        navigator.clipboard.writeText(url.toString());
-        alert('Input file share URL copied to clipboard');
+        copyToClipboard(url.toString()).then(() => {
+            alert('Input file share URL copied to clipboard');
+        });
     });
 
     console.log(editor!.getModel()!.getValue());
@@ -70,3 +71,30 @@ a.then(({ editor, connection }) => {
         viewer.addEventListener('resize', (() => { molstar.plugin.handleResize(); }))
     })
 });
+
+// https://stackoverflow.com/a/65996386/18245120
+async function copyToClipboard(textToCopy: string) {
+    // Navigator clipboard api needs a secure context (https)
+    if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(textToCopy);
+    } else {
+        // Use the 'out of viewport hidden text area' trick
+        const textArea = document.createElement("textarea");
+        textArea.value = textToCopy;
+
+        // Move textarea out of the viewport so it's not visible
+        textArea.style.position = "absolute";
+        textArea.style.left = "-999999px";
+
+        document.body.prepend(textArea);
+        textArea.select();
+
+        try {
+            document.execCommand('copy');
+        } catch (error) {
+            console.error(error);
+        } finally {
+            textArea.remove();
+        }
+    }
+}
