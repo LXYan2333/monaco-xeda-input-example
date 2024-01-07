@@ -1,8 +1,7 @@
 import { attach_monaco_to } from "monaco-xeda-input";
 import { attach_molstar_viewer_to } from "xeda-molstar-viewer";
 
-
-let a = attach_monaco_to(document.getElementById('app')!, `$ctrl
+let inputfile = `$ctrl
 method=rhf basis = 6-31g* DFT=b3lyp
 nmul=1 charge=0
 $end
@@ -27,11 +26,29 @@ matom = 3 3 3 3
 mmult = 1 1 1 1 
 mcharge = 0 0 0 0
 $end
-`, 'Fira Code');
+`
+
+let searchParams = new URLSearchParams(window.location.search);
+if (searchParams.has('input-file')) {
+    inputfile = searchParams.get('input-file')!;
+}
+
+
+let a = attach_monaco_to(document.getElementById('app')!, inputfile, 'Fira Code');
 
 
 
 a.then(({ editor, connection }) => {
+
+    // add a button to allow user to share url that contains the content of the editor
+    let share_button = document.getElementById('share-button')!;
+    share_button.addEventListener('click', () => {
+        let url = new URL(window.location.href);
+        url.searchParams.set('input-file', editor!.getModel()!.getValue());
+        navigator.clipboard.writeText(url.toString());
+        alert('Input file share URL copied to clipboard');
+    });
+
     console.log(editor!.getModel()!.getValue());
     editor.onDidChangeCursorPosition(e =>
         // @ts-ignore
