@@ -68,7 +68,44 @@ a.then(({ editor, connection }) => {
                 molstar.load(e.param.monomer_list, e.param.highlight_index)
             }
         });
-        viewer.addEventListener('resize', (() => { molstar.plugin.handleResize(); }))
+        viewer.addEventListener('resize', (() => { molstar.plugin.handleResize(); }));
+
+
+        // set camera type
+        let perspective = document.getElementById('perspective')! as HTMLInputElement;
+        let orthographic = document.getElementById('orthographic')! as HTMLInputElement;
+        perspective.addEventListener('click', () => {
+            if (perspective.checked) {
+                molstar.plugin.canvas3d?.camera.setState({
+                    mode: 'perspective'
+                });
+            }
+        });
+        orthographic.addEventListener('click', () => {
+            if (orthographic.checked) {
+                molstar.plugin.canvas3d?.camera.setState({
+                    mode: 'orthographic'
+                });
+            }
+        });
+
+        // set fog
+        let fog = document.getElementById('fog')! as HTMLInputElement;
+        fog.addEventListener('change', () => {
+            molstar.plugin.canvas3d?.camera.setState({
+                fog: parseFloat(fog.value)
+            });
+            // seems redundant, but without this, the fog won't be applied
+            molstar.plugin.canvas3d?.handleResize();
+        });
+
+        // set fov
+        let fov = document.getElementById('fov')! as HTMLInputElement;
+        fov.addEventListener('change', () => {
+            molstar.plugin.canvas3d?.camera.setState({
+                fov: parseFloat(fov.value) / 180 * Math.PI
+            });
+        });
     })
 });
 

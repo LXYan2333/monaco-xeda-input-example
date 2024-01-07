@@ -13,6 +13,21 @@
   <div id="app" style="width:49vw;height:90vh;border:1px solid grey;float: left;"></div>
   <div id="viewer" style="position: relative;width:49vw;height:90vh;border:1px solid grey;float: left;"></div>
   <button id="share-button">share input file</button>
+  <form>
+    <fieldset>
+      <legend>Camera type:</legend>
+  
+      <input type="radio" id="perspective" name="camera-type" value="P" />
+      <label for="perspective">perspective</label><br />
+  
+      <input type="radio" id="orthographic" name="camera-type" value="O" />
+      <label for="orthographic">orthographic</label><br />
+    </fieldset>
+  </form>
+  <label for="fog">Fog:</label>
+  <input type="range" min="0" max="100" value="15" id="fog" />
+  <label for="fov">FOV:</label>
+  <input type="range" min="0" max="180" value="45" id="fov" />
   <p style="float: inline-end;">If you use the rendered molecular figure in your work, you must cite Molstar:<br />
     David Sehnal, Sebastian Bittrich, Mandar Deshpande, Radka Svobodová, Karel Berka, Václav Bazgier, Sameer Velankar,
     Stephen K Burley, Jaroslav Koča, Alexander S Rose: Mol* Viewer: modern web app for 3D visualization and analysis of
