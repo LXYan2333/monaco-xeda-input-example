@@ -289,7 +289,7 @@ ${fuse_search_result.length === 0 ? '' : `Did you mean ${fuse_search_result[0].i
 
             // 必要的关键字是否存在？
             let need_break = false;
-            ['nmol', 'method', 'matom', 'mmult', 'mcharge'].forEach(keyword => {
+            ['nmol', 'matom', 'mmult', 'mcharge'].forEach(keyword => {
 
                 if (!eda_keywords.some(node => node.name === keyword)) {
                     diagnostics.push({
