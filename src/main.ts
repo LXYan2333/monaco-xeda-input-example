@@ -1,5 +1,6 @@
 import { attach_monaco_to } from "monaco-xeda-input";
 import { attach_molstar_viewer_to } from "xeda-molstar-viewer";
+import { editor } from "monaco-editor";
 
 let inputfile = `$ctrl
 method=rhf basis = 6-31g* DFT=b3lyp
@@ -135,3 +136,9 @@ async function copyToClipboard(textToCopy: string) {
         }
     }
 }
+
+// https://github.com/microsoft/monaco-editor/issues/1618
+// https://stackoverflow.com/questions/58271107/offset-between-text-and-cursor-with-the-monaco-editor-angular-under-chrome-m
+document.fonts.ready.then(() => {
+    editor.remeasureFonts()
+})
