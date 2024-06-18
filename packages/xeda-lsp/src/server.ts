@@ -198,7 +198,7 @@ export default class XEDAServer {
                 full: true
             },
             completionProvider: {
-                // triggerCharacters: ['='],
+                triggerCharacters: ['='],
                 completionItem: {
                     labelDetailsSupport: false
                 }

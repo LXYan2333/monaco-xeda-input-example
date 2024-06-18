@@ -96,8 +96,16 @@
                   "value": "="
                 },
                 {
-                  "type": "SYMBOL",
-                  "name": "ctr_value"
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "SYMBOL",
+                      "name": "ctr_value"
+                    },
+                    {
+                      "type": "BLANK"
+                    }
+                  ]
                 }
               ]
             },
@@ -108,13 +116,13 @@
         }
       ]
     },
-    "ctr_keyword": {
-      "type": "PATTERN",
-      "value": "[^ =$\\r\\n]+"
-    },
     "ctr_value": {
       "type": "PATTERN",
       "value": "[^ $\\r\\n]+"
+    },
+    "ctr_keyword": {
+      "type": "PATTERN",
+      "value": "[^ =$\\r\\n]+"
     },
     "end_token": {
       "type": "PATTERN",

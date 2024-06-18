@@ -21,8 +21,8 @@ enum {
   sym__space = 2,
   sym_ctr_start_token = 3,
   anon_sym_EQ = 4,
-  aux_sym_ctr_keyword_token1 = 5,
-  sym_ctr_value = 6,
+  sym_ctr_value = 5,
+  aux_sym_ctr_keyword_token1 = 6,
   sym_end_token = 7,
   sym_geo_start_token = 8,
   sym_atom_name = 9,
@@ -56,8 +56,8 @@ static const char * const ts_symbol_names[] = {
   [sym__space] = "_space",
   [sym_ctr_start_token] = "ctr_start_token",
   [anon_sym_EQ] = "=",
-  [aux_sym_ctr_keyword_token1] = "ctr_keyword_token1",
   [sym_ctr_value] = "ctr_value",
+  [aux_sym_ctr_keyword_token1] = "ctr_keyword_token1",
   [sym_end_token] = "end_token",
   [sym_geo_start_token] = "geo_start_token",
   [sym_atom_name] = "atom_name",
@@ -91,8 +91,8 @@ static const TSSymbol ts_symbol_map[] = {
   [sym__space] = sym__space,
   [sym_ctr_start_token] = sym_ctr_start_token,
   [anon_sym_EQ] = anon_sym_EQ,
-  [aux_sym_ctr_keyword_token1] = aux_sym_ctr_keyword_token1,
   [sym_ctr_value] = sym_ctr_value,
+  [aux_sym_ctr_keyword_token1] = aux_sym_ctr_keyword_token1,
   [sym_end_token] = sym_end_token,
   [sym_geo_start_token] = sym_geo_start_token,
   [sym_atom_name] = sym_atom_name,
@@ -141,13 +141,13 @@ static const TSSymbolMetadata ts_symbol_metadata[] = {
     .visible = true,
     .named = false,
   },
-  [aux_sym_ctr_keyword_token1] = {
-    .visible = false,
-    .named = false,
-  },
   [sym_ctr_value] = {
     .visible = true,
     .named = true,
+  },
+  [aux_sym_ctr_keyword_token1] = {
+    .visible = false,
+    .named = false,
   },
   [sym_end_token] = {
     .visible = true,
@@ -318,7 +318,7 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
       if (lookahead == ' ') ADVANCE(18);
       if (lookahead == '$') ADVANCE(7);
       if (lookahead == '=') ADVANCE(21);
-      if (lookahead != 0) ADVANCE(22);
+      if (lookahead != 0) ADVANCE(24);
       END_STATE();
     case 1:
       if (lookahead == '\n') ADVANCE(17);
@@ -328,24 +328,25 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
       if (lookahead == '\r') ADVANCE(1);
       if (lookahead == ' ') ADVANCE(18);
       if (lookahead == '$') ADVANCE(11);
-      if (lookahead == '-' ||
-          lookahead == '.' ||
-          ('0' <= lookahead && lookahead <= '9')) ADVANCE(28);
-      if (lookahead != 0) ADVANCE(27);
+      if (lookahead == '=') ADVANCE(23);
+      if (lookahead != 0) ADVANCE(22);
       END_STATE();
     case 3:
       if (lookahead == '\n') ADVANCE(17);
       if (lookahead == '\r') ADVANCE(1);
       if (lookahead == ' ') ADVANCE(18);
-      if (lookahead != 0 &&
-          lookahead != '$') ADVANCE(28);
+      if (lookahead == '$') ADVANCE(11);
+      if (lookahead == '-' ||
+          lookahead == '.' ||
+          ('0' <= lookahead && lookahead <= '9')) ADVANCE(29);
+      if (lookahead != 0) ADVANCE(28);
       END_STATE();
     case 4:
       if (lookahead == '\n') ADVANCE(17);
       if (lookahead == '\r') ADVANCE(1);
       if (lookahead == ' ') ADVANCE(18);
       if (lookahead != 0 &&
-          lookahead != '$') ADVANCE(23);
+          lookahead != '$') ADVANCE(29);
       END_STATE();
     case 5:
       if (lookahead == '\n') ADVANCE(17);
@@ -354,7 +355,7 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
       END_STATE();
     case 6:
       if (lookahead == 'A' ||
-          lookahead == 'a') ADVANCE(29);
+          lookahead == 'a') ADVANCE(30);
       END_STATE();
     case 7:
       if (lookahead == 'C' ||
@@ -372,7 +373,7 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
       END_STATE();
     case 9:
       if (lookahead == 'D' ||
-          lookahead == 'd') ADVANCE(24);
+          lookahead == 'd') ADVANCE(25);
       END_STATE();
     case 10:
       if (lookahead == 'E' ||
@@ -388,7 +389,7 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
       END_STATE();
     case 13:
       if (lookahead == 'O' ||
-          lookahead == 'o') ADVANCE(26);
+          lookahead == 'o') ADVANCE(27);
       END_STATE();
     case 14:
       if (lookahead == 'R' ||
@@ -422,13 +423,13 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
       ACCEPT_TOKEN(anon_sym_EQ);
       END_STATE();
     case 22:
-      ACCEPT_TOKEN(aux_sym_ctr_keyword_token1);
+      ACCEPT_TOKEN(sym_ctr_value);
+      if (lookahead == '=') ADVANCE(23);
       if (lookahead != 0 &&
           lookahead != '\n' &&
           lookahead != '\r' &&
           lookahead != ' ' &&
-          lookahead != '$' &&
-          lookahead != '=') ADVANCE(22);
+          lookahead != '$') ADVANCE(22);
       END_STATE();
     case 23:
       ACCEPT_TOKEN(sym_ctr_value);
@@ -439,29 +440,30 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
           lookahead != '$') ADVANCE(23);
       END_STATE();
     case 24:
-      ACCEPT_TOKEN(sym_end_token);
-      END_STATE();
-    case 25:
-      ACCEPT_TOKEN(sym_geo_start_token);
-      END_STATE();
-    case 26:
-      ACCEPT_TOKEN(sym_geo_start_token);
-      if (lookahead == 'M' ||
-          lookahead == 'm') ADVANCE(25);
-      END_STATE();
-    case 27:
-      ACCEPT_TOKEN(sym_atom_name);
-      if (lookahead == '-' ||
-          lookahead == '.' ||
-          ('0' <= lookahead && lookahead <= '9')) ADVANCE(28);
+      ACCEPT_TOKEN(aux_sym_ctr_keyword_token1);
       if (lookahead != 0 &&
           lookahead != '\n' &&
           lookahead != '\r' &&
           lookahead != ' ' &&
-          lookahead != '$') ADVANCE(27);
+          lookahead != '$' &&
+          lookahead != '=') ADVANCE(24);
+      END_STATE();
+    case 25:
+      ACCEPT_TOKEN(sym_end_token);
+      END_STATE();
+    case 26:
+      ACCEPT_TOKEN(sym_geo_start_token);
+      END_STATE();
+    case 27:
+      ACCEPT_TOKEN(sym_geo_start_token);
+      if (lookahead == 'M' ||
+          lookahead == 'm') ADVANCE(26);
       END_STATE();
     case 28:
-      ACCEPT_TOKEN(aux_sym_coordinate_token1);
+      ACCEPT_TOKEN(sym_atom_name);
+      if (lookahead == '-' ||
+          lookahead == '.' ||
+          ('0' <= lookahead && lookahead <= '9')) ADVANCE(29);
       if (lookahead != 0 &&
           lookahead != '\n' &&
           lookahead != '\r' &&
@@ -469,6 +471,14 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
           lookahead != '$') ADVANCE(28);
       END_STATE();
     case 29:
+      ACCEPT_TOKEN(aux_sym_coordinate_token1);
+      if (lookahead != 0 &&
+          lookahead != '\n' &&
+          lookahead != '\r' &&
+          lookahead != ' ' &&
+          lookahead != '$') ADVANCE(29);
+      END_STATE();
+    case 30:
       ACCEPT_TOKEN(sym_eda_start_token);
       END_STATE();
     default:
@@ -479,9 +489,9 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
 static const TSLexMode ts_lex_modes[STATE_COUNT] = {
   [0] = {.lex_state = 0},
   [1] = {.lex_state = 0},
-  [2] = {.lex_state = 2},
-  [3] = {.lex_state = 2},
-  [4] = {.lex_state = 2},
+  [2] = {.lex_state = 3},
+  [3] = {.lex_state = 3},
+  [4] = {.lex_state = 3},
   [5] = {.lex_state = 0},
   [6] = {.lex_state = 0},
   [7] = {.lex_state = 0},
@@ -489,27 +499,27 @@ static const TSLexMode ts_lex_modes[STATE_COUNT] = {
   [9] = {.lex_state = 0},
   [10] = {.lex_state = 0},
   [11] = {.lex_state = 0},
-  [12] = {.lex_state = 3},
+  [12] = {.lex_state = 4},
   [13] = {.lex_state = 0},
-  [14] = {.lex_state = 2},
-  [15] = {.lex_state = 3},
-  [16] = {.lex_state = 3},
-  [17] = {.lex_state = 3},
-  [18] = {.lex_state = 2},
+  [14] = {.lex_state = 4},
+  [15] = {.lex_state = 4},
+  [16] = {.lex_state = 4},
+  [17] = {.lex_state = 4},
+  [18] = {.lex_state = 3},
   [19] = {.lex_state = 0},
   [20] = {.lex_state = 0},
-  [21] = {.lex_state = 3},
+  [21] = {.lex_state = 4},
   [22] = {.lex_state = 0},
-  [23] = {.lex_state = 0},
-  [24] = {.lex_state = 3},
-  [25] = {.lex_state = 0},
+  [23] = {.lex_state = 2},
+  [24] = {.lex_state = 0},
+  [25] = {.lex_state = 3},
   [26] = {.lex_state = 0},
   [27] = {.lex_state = 0},
   [28] = {.lex_state = 0},
   [29] = {.lex_state = 0},
   [30] = {.lex_state = 0},
   [31] = {.lex_state = 0},
-  [32] = {.lex_state = 3},
+  [32] = {.lex_state = 0},
   [33] = {.lex_state = 0},
   [34] = {.lex_state = 4},
   [35] = {.lex_state = 0},
@@ -517,7 +527,7 @@ static const TSLexMode ts_lex_modes[STATE_COUNT] = {
   [37] = {.lex_state = 0},
   [38] = {.lex_state = 0},
   [39] = {.lex_state = 0},
-  [40] = {.lex_state = 3},
+  [40] = {.lex_state = 4},
   [41] = {.lex_state = 0},
   [42] = {.lex_state = 0},
   [43] = {.lex_state = 0},
@@ -540,7 +550,7 @@ static const uint16_t ts_parse_table[LARGE_STATE_COUNT][SYMBOL_COUNT] = {
     [sym_source_file] = STATE(37),
     [sym_ctr_section] = STATE(8),
     [sym_geo_section] = STATE(19),
-    [sym_eda_section] = STATE(31),
+    [sym_eda_section] = STATE(32),
     [ts_builtin_sym_end] = ACTIONS(7),
     [sym__line_ending] = ACTIONS(3),
     [sym__space] = ACTIONS(5),
@@ -629,7 +639,7 @@ static const uint16_t ts_small_parse_table[] = {
       sym__space,
     ACTIONS(31), 1,
       aux_sym_ctr_keyword_token1,
-    STATE(30), 1,
+    STATE(31), 1,
       sym_eda_keyword,
     STATE(39), 1,
       sym_eda_item_list,
@@ -645,7 +655,7 @@ static const uint16_t ts_small_parse_table[] = {
       aux_sym_ctr_keyword_token1,
     ACTIONS(36), 1,
       sym_end_token,
-    STATE(30), 1,
+    STATE(31), 1,
       sym_eda_keyword,
     STATE(7), 2,
       sym_eda_item,
@@ -688,7 +698,7 @@ static const uint16_t ts_small_parse_table[] = {
       aux_sym_ctr_keyword_token1,
     ACTIONS(45), 1,
       sym_end_token,
-    STATE(30), 1,
+    STATE(31), 1,
       sym_eda_keyword,
     STATE(7), 2,
       sym_eda_item,
@@ -730,21 +740,21 @@ static const uint16_t ts_small_parse_table[] = {
       aux_sym_ctr_keyword_token1,
       sym_end_token,
   [254] = 4,
-    ACTIONS(3), 1,
-      sym__line_ending,
     ACTIONS(5), 1,
       sym__space,
     ACTIONS(55), 1,
-      sym_end_token,
-    ACTIONS(57), 2,
-      sym_atom_name,
+      sym__line_ending,
+    ACTIONS(57), 1,
       aux_sym_coordinate_token1,
+    STATE(14), 2,
+      sym_coordinate,
+      aux_sym_coordinates_repeat1,
   [268] = 4,
     ACTIONS(5), 1,
       sym__space,
-    ACTIONS(59), 1,
+    ACTIONS(60), 1,
       sym__line_ending,
-    ACTIONS(61), 1,
+    ACTIONS(62), 1,
       aux_sym_coordinate_token1,
     STATE(15), 2,
       sym_eda_value,
@@ -752,9 +762,9 @@ static const uint16_t ts_small_parse_table[] = {
   [282] = 4,
     ACTIONS(5), 1,
       sym__space,
-    ACTIONS(64), 1,
+    ACTIONS(65), 1,
       sym__line_ending,
-    ACTIONS(66), 1,
+    ACTIONS(67), 1,
       aux_sym_coordinate_token1,
     STATE(15), 2,
       sym_eda_value,
@@ -764,9 +774,9 @@ static const uint16_t ts_small_parse_table[] = {
       sym__space,
     ACTIONS(49), 1,
       aux_sym_coordinate_token1,
-    ACTIONS(68), 1,
+    ACTIONS(69), 1,
       sym__line_ending,
-    STATE(24), 2,
+    STATE(14), 2,
       sym_coordinate,
       aux_sym_coordinates_repeat1,
   [310] = 4,
@@ -774,9 +784,9 @@ static const uint16_t ts_small_parse_table[] = {
       sym__line_ending,
     ACTIONS(5), 1,
       sym__space,
-    ACTIONS(70), 1,
+    ACTIONS(71), 1,
       sym_end_token,
-    ACTIONS(72), 2,
+    ACTIONS(73), 2,
       sym_atom_name,
       aux_sym_coordinate_token1,
   [324] = 5,
@@ -797,16 +807,16 @@ static const uint16_t ts_small_parse_table[] = {
       sym__space,
     ACTIONS(13), 1,
       sym_eda_start_token,
-    ACTIONS(74), 1,
+    ACTIONS(75), 1,
       ts_builtin_sym_end,
     STATE(36), 1,
       sym_eda_section,
   [356] = 4,
     ACTIONS(5), 1,
       sym__space,
-    ACTIONS(66), 1,
+    ACTIONS(67), 1,
       aux_sym_coordinate_token1,
-    ACTIONS(76), 1,
+    ACTIONS(77), 1,
       sym__line_ending,
     STATE(16), 2,
       sym_eda_value,
@@ -816,54 +826,41 @@ static const uint16_t ts_small_parse_table[] = {
       sym__line_ending,
     ACTIONS(5), 1,
       sym__space,
-    ACTIONS(78), 3,
+    ACTIONS(79), 3,
       ts_builtin_sym_end,
       sym_geo_start_token,
       sym_eda_start_token,
-  [382] = 3,
+  [382] = 5,
     ACTIONS(3), 1,
       sym__line_ending,
     ACTIONS(5), 1,
       sym__space,
-    ACTIONS(80), 3,
+    ACTIONS(81), 1,
+      sym_ctr_value,
+    ACTIONS(83), 1,
+      aux_sym_ctr_keyword_token1,
+    ACTIONS(85), 1,
+      sym_end_token,
+  [398] = 3,
+    ACTIONS(3), 1,
+      sym__line_ending,
+    ACTIONS(5), 1,
+      sym__space,
+    ACTIONS(87), 3,
       anon_sym_EQ,
       aux_sym_ctr_keyword_token1,
       sym_end_token,
-  [394] = 4,
-    ACTIONS(5), 1,
-      sym__space,
-    ACTIONS(82), 1,
-      sym__line_ending,
-    ACTIONS(84), 1,
-      aux_sym_coordinate_token1,
-    STATE(24), 2,
-      sym_coordinate,
-      aux_sym_coordinates_repeat1,
-  [408] = 3,
+  [410] = 4,
     ACTIONS(3), 1,
       sym__line_ending,
     ACTIONS(5), 1,
       sym__space,
-    ACTIONS(87), 2,
-      aux_sym_ctr_keyword_token1,
+    ACTIONS(89), 1,
       sym_end_token,
-  [419] = 3,
-    ACTIONS(3), 1,
-      sym__line_ending,
-    ACTIONS(5), 1,
-      sym__space,
-    ACTIONS(89), 2,
-      aux_sym_ctr_keyword_token1,
-      sym_end_token,
-  [430] = 3,
-    ACTIONS(3), 1,
-      sym__line_ending,
-    ACTIONS(5), 1,
-      sym__space,
     ACTIONS(91), 2,
-      aux_sym_ctr_keyword_token1,
-      sym_end_token,
-  [441] = 3,
+      sym_atom_name,
+      aux_sym_coordinate_token1,
+  [424] = 3,
     ACTIONS(3), 1,
       sym__line_ending,
     ACTIONS(5), 1,
@@ -871,111 +868,128 @@ static const uint16_t ts_small_parse_table[] = {
     ACTIONS(93), 2,
       aux_sym_ctr_keyword_token1,
       sym_end_token,
-  [452] = 3,
+  [435] = 3,
     ACTIONS(3), 1,
       sym__line_ending,
     ACTIONS(5), 1,
       sym__space,
     ACTIONS(95), 2,
-      ts_builtin_sym_end,
-      sym_eda_start_token,
-  [463] = 3,
+      aux_sym_ctr_keyword_token1,
+      sym_end_token,
+  [446] = 3,
+    ACTIONS(3), 1,
+      sym__line_ending,
     ACTIONS(5), 1,
       sym__space,
-    ACTIONS(97), 1,
+    ACTIONS(97), 2,
+      aux_sym_ctr_keyword_token1,
+      sym_end_token,
+  [457] = 3,
+    ACTIONS(3), 1,
       sym__line_ending,
-    ACTIONS(99), 1,
+    ACTIONS(5), 1,
+      sym__space,
+    ACTIONS(99), 2,
+      aux_sym_ctr_keyword_token1,
+      sym_end_token,
+  [468] = 3,
+    ACTIONS(3), 1,
+      sym__line_ending,
+    ACTIONS(5), 1,
+      sym__space,
+    ACTIONS(101), 2,
+      ts_builtin_sym_end,
+      sym_eda_start_token,
+  [479] = 3,
+    ACTIONS(5), 1,
+      sym__space,
+    ACTIONS(103), 1,
+      sym__line_ending,
+    ACTIONS(105), 1,
       anon_sym_EQ,
-  [473] = 3,
+  [489] = 3,
     ACTIONS(3), 1,
       sym__line_ending,
     ACTIONS(5), 1,
       sym__space,
     ACTIONS(38), 1,
       ts_builtin_sym_end,
-  [483] = 2,
-    ACTIONS(5), 1,
-      sym__space,
-    ACTIONS(101), 2,
-      sym__line_ending,
-      aux_sym_coordinate_token1,
-  [491] = 3,
-    ACTIONS(3), 1,
-      sym__line_ending,
-    ACTIONS(5), 1,
-      sym__space,
-    ACTIONS(103), 1,
-      ts_builtin_sym_end,
-  [501] = 3,
-    ACTIONS(3), 1,
-      sym__line_ending,
-    ACTIONS(5), 1,
-      sym__space,
-    ACTIONS(105), 1,
-      sym_ctr_value,
-  [511] = 3,
-    ACTIONS(3), 1,
-      sym__line_ending,
-    ACTIONS(5), 1,
-      sym__space,
-    ACTIONS(74), 1,
-      ts_builtin_sym_end,
-  [521] = 3,
+  [499] = 3,
     ACTIONS(3), 1,
       sym__line_ending,
     ACTIONS(5), 1,
       sym__space,
     ACTIONS(107), 1,
       ts_builtin_sym_end,
-  [531] = 3,
+  [509] = 2,
+    ACTIONS(5), 1,
+      sym__space,
+    ACTIONS(109), 2,
+      sym__line_ending,
+      aux_sym_coordinate_token1,
+  [517] = 3,
     ACTIONS(3), 1,
       sym__line_ending,
     ACTIONS(5), 1,
       sym__space,
-    ACTIONS(109), 1,
+    ACTIONS(75), 1,
       ts_builtin_sym_end,
-  [541] = 3,
+  [527] = 3,
     ACTIONS(3), 1,
       sym__line_ending,
     ACTIONS(5), 1,
       sym__space,
     ACTIONS(111), 1,
-      sym_end_token,
-  [551] = 3,
+      ts_builtin_sym_end,
+  [537] = 3,
     ACTIONS(3), 1,
       sym__line_ending,
     ACTIONS(5), 1,
       sym__space,
     ACTIONS(113), 1,
-      sym_end_token,
-  [561] = 2,
-    ACTIONS(5), 1,
-      sym__space,
-    ACTIONS(115), 2,
-      sym__line_ending,
-      aux_sym_coordinate_token1,
-  [569] = 2,
-    ACTIONS(5), 1,
-      sym__space,
-    ACTIONS(117), 2,
-      sym__line_ending,
-      anon_sym_EQ,
-  [577] = 3,
+      ts_builtin_sym_end,
+  [547] = 3,
     ACTIONS(3), 1,
       sym__line_ending,
     ACTIONS(5), 1,
       sym__space,
-    ACTIONS(119), 1,
+    ACTIONS(115), 1,
       sym_end_token,
-  [587] = 2,
+  [557] = 3,
+    ACTIONS(3), 1,
+      sym__line_ending,
     ACTIONS(5), 1,
       sym__space,
-    ACTIONS(121), 1,
+    ACTIONS(117), 1,
+      sym_end_token,
+  [567] = 2,
+    ACTIONS(5), 1,
+      sym__space,
+    ACTIONS(119), 2,
       sym__line_ending,
-  [594] = 2,
+      aux_sym_coordinate_token1,
+  [575] = 2,
+    ACTIONS(5), 1,
+      sym__space,
+    ACTIONS(121), 2,
+      sym__line_ending,
+      anon_sym_EQ,
+  [583] = 3,
+    ACTIONS(3), 1,
+      sym__line_ending,
     ACTIONS(5), 1,
       sym__space,
     ACTIONS(123), 1,
+      sym_end_token,
+  [593] = 2,
+    ACTIONS(5), 1,
+      sym__space,
+    ACTIONS(125), 1,
+      sym__line_ending,
+  [600] = 2,
+    ACTIONS(5), 1,
+      sym__space,
+    ACTIONS(127), 1,
       sym__line_ending,
 };
 
@@ -1002,27 +1016,27 @@ static const uint32_t ts_small_parse_table_map[] = {
   [SMALL_STATE(21)] = 356,
   [SMALL_STATE(22)] = 370,
   [SMALL_STATE(23)] = 382,
-  [SMALL_STATE(24)] = 394,
-  [SMALL_STATE(25)] = 408,
-  [SMALL_STATE(26)] = 419,
-  [SMALL_STATE(27)] = 430,
-  [SMALL_STATE(28)] = 441,
-  [SMALL_STATE(29)] = 452,
-  [SMALL_STATE(30)] = 463,
-  [SMALL_STATE(31)] = 473,
-  [SMALL_STATE(32)] = 483,
-  [SMALL_STATE(33)] = 491,
-  [SMALL_STATE(34)] = 501,
-  [SMALL_STATE(35)] = 511,
-  [SMALL_STATE(36)] = 521,
-  [SMALL_STATE(37)] = 531,
-  [SMALL_STATE(38)] = 541,
-  [SMALL_STATE(39)] = 551,
-  [SMALL_STATE(40)] = 561,
-  [SMALL_STATE(41)] = 569,
-  [SMALL_STATE(42)] = 577,
-  [SMALL_STATE(43)] = 587,
-  [SMALL_STATE(44)] = 594,
+  [SMALL_STATE(24)] = 398,
+  [SMALL_STATE(25)] = 410,
+  [SMALL_STATE(26)] = 424,
+  [SMALL_STATE(27)] = 435,
+  [SMALL_STATE(28)] = 446,
+  [SMALL_STATE(29)] = 457,
+  [SMALL_STATE(30)] = 468,
+  [SMALL_STATE(31)] = 479,
+  [SMALL_STATE(32)] = 489,
+  [SMALL_STATE(33)] = 499,
+  [SMALL_STATE(34)] = 509,
+  [SMALL_STATE(35)] = 517,
+  [SMALL_STATE(36)] = 527,
+  [SMALL_STATE(37)] = 537,
+  [SMALL_STATE(38)] = 547,
+  [SMALL_STATE(39)] = 557,
+  [SMALL_STATE(40)] = 567,
+  [SMALL_STATE(41)] = 575,
+  [SMALL_STATE(42)] = 583,
+  [SMALL_STATE(43)] = 593,
+  [SMALL_STATE(44)] = 600,
 };
 
 static const TSParseActionEntry ts_parse_actions[] = {
@@ -1035,57 +1049,59 @@ static const TSParseActionEntry ts_parse_actions[] = {
   [11] = {.entry = {.count = 1, .reusable = true}}, SHIFT(2),
   [13] = {.entry = {.count = 1, .reusable = true}}, SHIFT(6),
   [15] = {.entry = {.count = 1, .reusable = false}}, SHIFT(12),
-  [17] = {.entry = {.count = 1, .reusable = false}}, SHIFT(32),
+  [17] = {.entry = {.count = 1, .reusable = false}}, SHIFT(34),
   [19] = {.entry = {.count = 1, .reusable = true}}, REDUCE(aux_sym_geo_item_list_repeat1, 2),
   [21] = {.entry = {.count = 2, .reusable = false}}, REDUCE(aux_sym_geo_item_list_repeat1, 2), SHIFT_REPEAT(12),
-  [24] = {.entry = {.count = 2, .reusable = false}}, REDUCE(aux_sym_geo_item_list_repeat1, 2), SHIFT_REPEAT(32),
+  [24] = {.entry = {.count = 2, .reusable = false}}, REDUCE(aux_sym_geo_item_list_repeat1, 2), SHIFT_REPEAT(34),
   [27] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_geo_item_list, 1),
-  [29] = {.entry = {.count = 1, .reusable = true}}, SHIFT(23),
+  [29] = {.entry = {.count = 1, .reusable = true}}, SHIFT(24),
   [31] = {.entry = {.count = 1, .reusable = true}}, SHIFT(41),
   [33] = {.entry = {.count = 2, .reusable = true}}, REDUCE(aux_sym_eda_item_list_repeat1, 2), SHIFT_REPEAT(41),
   [36] = {.entry = {.count = 1, .reusable = true}}, REDUCE(aux_sym_eda_item_list_repeat1, 2),
   [38] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_source_file, 1),
-  [40] = {.entry = {.count = 2, .reusable = true}}, REDUCE(aux_sym_ctr_item_list_repeat1, 2), SHIFT_REPEAT(23),
+  [40] = {.entry = {.count = 2, .reusable = true}}, REDUCE(aux_sym_ctr_item_list_repeat1, 2), SHIFT_REPEAT(24),
   [43] = {.entry = {.count = 1, .reusable = true}}, REDUCE(aux_sym_ctr_item_list_repeat1, 2),
   [45] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_eda_item_list, 1),
   [47] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_ctr_item_list, 1),
-  [49] = {.entry = {.count = 1, .reusable = true}}, SHIFT(32),
-  [51] = {.entry = {.count = 1, .reusable = true}}, SHIFT(34),
+  [49] = {.entry = {.count = 1, .reusable = true}}, SHIFT(34),
+  [51] = {.entry = {.count = 1, .reusable = true}}, SHIFT(23),
   [53] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_ctr_item, 1),
-  [55] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_geo_item, 2),
-  [57] = {.entry = {.count = 1, .reusable = false}}, REDUCE(sym_geo_item, 2),
-  [59] = {.entry = {.count = 1, .reusable = true}}, REDUCE(aux_sym_eda_item_repeat1, 2),
-  [61] = {.entry = {.count = 2, .reusable = true}}, REDUCE(aux_sym_eda_item_repeat1, 2), SHIFT_REPEAT(40),
-  [64] = {.entry = {.count = 1, .reusable = true}}, SHIFT(25),
-  [66] = {.entry = {.count = 1, .reusable = true}}, SHIFT(40),
-  [68] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_coordinates, 1),
-  [70] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_geo_item, 3),
-  [72] = {.entry = {.count = 1, .reusable = false}}, REDUCE(sym_geo_item, 3),
-  [74] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_source_file, 2),
-  [76] = {.entry = {.count = 1, .reusable = true}}, SHIFT(26),
-  [78] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_ctr_section, 3),
-  [80] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_ctr_keyword, 1),
-  [82] = {.entry = {.count = 1, .reusable = true}}, REDUCE(aux_sym_coordinates_repeat1, 2),
-  [84] = {.entry = {.count = 2, .reusable = true}}, REDUCE(aux_sym_coordinates_repeat1, 2), SHIFT_REPEAT(32),
-  [87] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_eda_item, 4),
-  [89] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_eda_item, 3),
-  [91] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_ctr_item, 3),
-  [93] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_eda_item, 2),
-  [95] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_geo_section, 3),
-  [97] = {.entry = {.count = 1, .reusable = true}}, SHIFT(28),
-  [99] = {.entry = {.count = 1, .reusable = true}}, SHIFT(21),
-  [101] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_coordinate, 1),
-  [103] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_eda_section, 3),
-  [105] = {.entry = {.count = 1, .reusable = true}}, SHIFT(27),
-  [107] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_source_file, 3),
-  [109] = {.entry = {.count = 1, .reusable = true}},  ACCEPT_INPUT(),
-  [111] = {.entry = {.count = 1, .reusable = true}}, SHIFT(22),
-  [113] = {.entry = {.count = 1, .reusable = true}}, SHIFT(33),
-  [115] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_eda_value, 1),
-  [117] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_eda_keyword, 1),
-  [119] = {.entry = {.count = 1, .reusable = true}}, SHIFT(29),
-  [121] = {.entry = {.count = 1, .reusable = true}}, SHIFT(18),
-  [123] = {.entry = {.count = 1, .reusable = true}}, SHIFT(14),
+  [55] = {.entry = {.count = 1, .reusable = true}}, REDUCE(aux_sym_coordinates_repeat1, 2),
+  [57] = {.entry = {.count = 2, .reusable = true}}, REDUCE(aux_sym_coordinates_repeat1, 2), SHIFT_REPEAT(34),
+  [60] = {.entry = {.count = 1, .reusable = true}}, REDUCE(aux_sym_eda_item_repeat1, 2),
+  [62] = {.entry = {.count = 2, .reusable = true}}, REDUCE(aux_sym_eda_item_repeat1, 2), SHIFT_REPEAT(40),
+  [65] = {.entry = {.count = 1, .reusable = true}}, SHIFT(26),
+  [67] = {.entry = {.count = 1, .reusable = true}}, SHIFT(40),
+  [69] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_coordinates, 1),
+  [71] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_geo_item, 3),
+  [73] = {.entry = {.count = 1, .reusable = false}}, REDUCE(sym_geo_item, 3),
+  [75] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_source_file, 2),
+  [77] = {.entry = {.count = 1, .reusable = true}}, SHIFT(27),
+  [79] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_ctr_section, 3),
+  [81] = {.entry = {.count = 1, .reusable = true}}, SHIFT(28),
+  [83] = {.entry = {.count = 1, .reusable = false}}, REDUCE(sym_ctr_item, 2),
+  [85] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_ctr_item, 2),
+  [87] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_ctr_keyword, 1),
+  [89] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_geo_item, 2),
+  [91] = {.entry = {.count = 1, .reusable = false}}, REDUCE(sym_geo_item, 2),
+  [93] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_eda_item, 4),
+  [95] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_eda_item, 3),
+  [97] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_ctr_item, 3),
+  [99] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_eda_item, 2),
+  [101] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_geo_section, 3),
+  [103] = {.entry = {.count = 1, .reusable = true}}, SHIFT(29),
+  [105] = {.entry = {.count = 1, .reusable = true}}, SHIFT(21),
+  [107] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_eda_section, 3),
+  [109] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_coordinate, 1),
+  [111] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_source_file, 3),
+  [113] = {.entry = {.count = 1, .reusable = true}},  ACCEPT_INPUT(),
+  [115] = {.entry = {.count = 1, .reusable = true}}, SHIFT(22),
+  [117] = {.entry = {.count = 1, .reusable = true}}, SHIFT(33),
+  [119] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_eda_value, 1),
+  [121] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_eda_keyword, 1),
+  [123] = {.entry = {.count = 1, .reusable = true}}, SHIFT(30),
+  [125] = {.entry = {.count = 1, .reusable = true}}, SHIFT(18),
+  [127] = {.entry = {.count = 1, .reusable = true}}, SHIFT(25),
 };
 
 #ifdef __cplusplus

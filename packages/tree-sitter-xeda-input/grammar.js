@@ -29,12 +29,12 @@ module.exports = grammar({
             $.ctr_keyword,
             optional(seq(
                 '=',
-                $.ctr_value
+                optional($.ctr_value)
             ))),
 
-        ctr_keyword: $ => /[^ =$\r\n]+/,
-
         ctr_value: $ => /[^ $\r\n]+/,
+
+        ctr_keyword: $ => /[^ =$\r\n]+/,
 
         end_token: $ => /\$[eE][nN][dD]/,
 
