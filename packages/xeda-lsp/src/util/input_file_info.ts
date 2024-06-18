@@ -3,6 +3,8 @@ import Parser from "web-tree-sitter";
 // 为什么 TS 不支持反射啊！！！
 export type method = 'rhf' | 'uhf' | 'rohf';
 export const method_sting_list = ['rhf', 'uhf', 'rohf'];
+export type print_level = 'brief' | 'detailed'
+export const print_level_string_list = ['brief', 'detailed'];
 
 export type atom = 'h' | 'he' | 'li' | 'be' | 'b' | 'c' | 'n' | 'o' | 'f' | 'ne' | 'na' | 'mg' | 'al' | 'si' | 'p' | 's' | 'cl' | 'ar' | 'k' | 'ca' | 'sc' | 'ti' | 'v' | 'cr' | 'mn' | 'fe' | 'co' | 'ni' | 'cu' | 'zn' | 'ga' | 'ge' | 'as' | 'se' | 'br' | 'kr' | 'rb' | 'sr' | 'y' | 'zr' | 'nb' | 'mo' | 'tc' | 'ru' | 'rh' | 'pd' | 'ag' | 'cd' | 'in' | 'sn' | 'sb' | 'te' | 'i' | 'xe' | 'cs' | 'ba' | 'la' | 'ce' | 'pr' | 'nd' | 'pm' | 'sm' | 'eu' | 'gd' | 'tb' | 'dy' | 'ho' | 'er' | 'tm' | 'yb' | 'lu' | 'hf' | 'ta' | 'w' | 're' | 'os' | 'ir' | 'pt' | 'au' | 'hg' | 'tl' | 'pb' | 'bi' | 'po' | 'at' | 'rn' | 'fr' | 'ra' | 'ac' | 'th' | 'pa' | 'u' | 'np' | 'pu' | 'am' | 'cm' | 'bk' | 'cf' | 'es' | 'fm' | 'md' | 'no' | 'lr' | 'rf' | 'db' | 'sg' | 'bh' | 'hs' | 'mt' | 'ds' | 'rg' | 'cn' | 'nh' | 'fl' | 'mc' | 'lv' | 'ts' | 'og';
 export const atom_string_list = ['h', 'he', 'li', 'be', 'b', 'c', 'n', 'o', 'f', 'ne', 'na', 'mg', 'al', 'si', 'p', 's', 'cl', 'ar', 'k', 'ca', 'sc', 'ti', 'v', 'cr', 'mn', 'fe', 'co', 'ni', 'cu', 'zn', 'ga', 'ge', 'as', 'se', 'br', 'kr', 'rb', 'sr', 'y', 'zr', 'nb', 'mo', 'tc', 'ru', 'rh', 'pd', 'ag', 'cd', 'in', 'sn', 'sb', 'te', 'i', 'xe', 'cs', 'ba', 'la', 'ce', 'pr', 'nd', 'pm', 'sm', 'eu', 'gd', 'tb', 'dy', 'ho', 'er', 'tm', 'yb', 'lu', 'hf', 'ta', 'w', 're', 'os', 'ir', 'pt', 'au', 'hg', 'tl', 'pb', 'bi', 'po', 'at', 'rn', 'fr', 'ra', 'ac', 'th', 'pa', 'u', 'np', 'pu', 'am', 'cm', 'bk', 'cf', 'es', 'fm', 'md', 'no', 'lr', 'rf', 'db', 'sg', 'bh', 'hs', 'mt', 'ds', 'rg', 'cn', 'nh', 'fl', 'mc', 'lv', 'ts', 'og'];
@@ -44,6 +46,7 @@ export class input_file_info {
     charge: number = 0;
     nuclear_charge: number = 0;
     max_iter: number = 50;
+    print_level: print_level = 'brief';
     geom: atom_and_coordiante[] = [];
     nmol: number | undefined = undefined;
     have_eda_section: boolean = false;

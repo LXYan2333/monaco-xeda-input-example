@@ -125,6 +125,9 @@ export default class Analyzer {
                                 case ('max_iter'):
                                     parsed_keywords.push(new KW.Max_Iter('max_iter', ctr_item, tree.rootNode, this.input_file_info));
                                     break;
+                                case ('print_level'):
+                                    parsed_keywords.push(new KW.Print_Level('print_level', ctr_item, tree.rootNode, this.input_file_info));
+                                    break;
                             }
                         }
                     }

@@ -6,7 +6,7 @@ import Fuse from 'fuse.js';
 import * as IFI from '../../input_file_info';
 import { OneLineToken } from '../../token';
 
-export const keywords_list: string[] = ['method', 'basis', 'charge', 'nmul', 'dft', 'max_iter']
+export const keywords_list: string[] = ['method', 'basis', 'charge', 'nmul', 'dft', 'max_iter', 'print_level']
 
 export const no_param_list: string[] = []
 
@@ -365,6 +365,28 @@ The name of density functional.
         let text = this.node.children[2]?.text.toLowerCase();
         if (this.allowed_param.includes(text)) {
             this.input_file_info.dft = text as IFI.dft;
+        }
+    }
+}
+
+export class Print_Level extends OneString {
+    allowed_param: string[] = IFI.print_level_string_list;
+    fuse = new Fuse(this.allowed_param, { isCaseSensitive: false });
+    completion_info: string[] = IFI.print_level_string_list;
+    markdown_hover_info: string = `## PRINT_LEVEL
+
+Control the level of output information. Available options are:
+
+- BRIEF: The default print level. Only the most important information will be printed.
+
+- DETAILED: Detailed information will be printed. The output file size will be significantly larger.`;
+
+
+    constructor(name: string, node: Parser.SyntaxNode, root_node: Parser.SyntaxNode, input_file_info: IFI.input_file_info) {
+        super(name, node, root_node, input_file_info);
+        let text = this.node.children[2]?.text.toLowerCase();
+        if (this.allowed_param.includes(text)) {
+            this.input_file_info.print_level = text as IFI.print_level;
         }
     }
 }

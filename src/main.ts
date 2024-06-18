@@ -4,7 +4,7 @@ import { editor } from "monaco-editor";
 
 let inputfile = `$ctrl
 method=rhf basis = 6-31g* DFT=b3lyp
-nmul=1 charge=0
+nmul=1 charge=0 print_level = brief
 $end
 $geom
 O     1.2245363506   1.9369107829  -1.5249005020
