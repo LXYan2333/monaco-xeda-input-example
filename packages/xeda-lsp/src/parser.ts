@@ -5,11 +5,11 @@ export async function initParser(): Promise<Parser> {
     await Parser.init({
         locateFile(_scriptName: string, _scriptDirectory: string) {
 
-            return `/node_modules/web-tree-sitter/tree-sitter.wasm`;
+            return new URL("/node_modules/web-tree-sitter/tree-sitter.wasm", import.meta.url).href;
         },
     });
     const parser = new Parser();
-    const lang = await Parser.Language.load('/node_modules/tree-sitter-xeda-input/tree-sitter-XEDA.wasm');
+    const lang = await Parser.Language.load(new URL('/node_modules/tree-sitter-xeda-input/tree-sitter-XEDA.wasm', import.meta.url).href);
     parser.setLanguage(lang);
     return parser;
 }

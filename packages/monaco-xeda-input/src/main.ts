@@ -14,7 +14,7 @@ import '@codingame/monaco-vscode-theme-defaults-default-extension';
 import { Uri } from 'vscode';
 
 import { buildWorkerDefinition } from 'monaco-editor-workers';
-buildWorkerDefinition('../../node_modules/monaco-editor-workers/dist/workers/', new URL('', window.location.href).href, false);
+buildWorkerDefinition('/node_modules/monaco-editor-workers/dist/workers/', new URL('', window.location.href).href, false);
 
 const languageId = 'xeda';
 
@@ -107,8 +107,7 @@ const setup_and_run = async (elem: HTMLElement, editorText: string, fontFamily: 
         });
     }
 
-    const XEDA_LSP_Worker_Url = new URL('node_modules/xeda-lsp/out/main.js', window.location.href).href;
-    const worker = new Worker(XEDA_LSP_Worker_Url, {
+    const worker = new Worker(new URL('/node_modules/xeda-lsp/out/main.js', import.meta.url), {
         type: 'module',
         name: 'XEDA LSP worker'
     });
