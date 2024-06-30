@@ -25,3 +25,5 @@ out
 *.sw?
 
 tsconfig.tsbuildinfo
+
+public/workers

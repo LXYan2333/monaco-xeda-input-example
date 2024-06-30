@@ -16,6 +16,7 @@ Monaco editor for XEDA input files.
 
 ```console
 $ npm install
+$ npm run build
 $ npm run watch
 ```
 
@@ -24,6 +25,23 @@ open another console:
 ```console
 $ npm run dev
 ```
+
+## build production version
+
+1. set base url in `vite.config.ts`
+
+2. build project:
+
+    ```console
+    $ npm install
+    $ npm run build
+    ```
+
+3. preview build output:
+
+    ```console
+    $ npm run preview
+    ```
 
 ## usage
 

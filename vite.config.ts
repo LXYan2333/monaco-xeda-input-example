@@ -6,6 +6,7 @@ import url from 'url';
 // https://vitejs.dev/config/
 export default defineConfig(() => {
   const config = {
+    base: "/monaco-xeda-input-example/",
     plugins: [
       // vsixPlugin()
     ],

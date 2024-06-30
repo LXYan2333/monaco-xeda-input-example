@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "node --experimental-import-meta-resolve ./node_modules/vite/bin/vite.js",
-    "copy:monacoworkers": "shx mkdir -p ./dist/node_modules/monaco-editor-workers/dist/workers/ && shx cp -r ./node_modules/monaco-editor-workers/dist/workers/editorWorker* ./dist/node_modules/monaco-editor-workers/dist/workers/",
-    "build": "tsc -b && vite build && npm run copy:monacoworkers",
+    "dev": "npm run copy:monacoworkers && node --experimental-import-meta-resolve ./node_modules/vite/bin/vite.js",
+    "copy:monacoworkers": "shx mkdir -p ./public/workers && shx cp -r ./node_modules/monaco-editor-workers/dist/workers/editorWorker* ./public/workers",
+    "build": "npm run copy:monacoworkers && tsc -b && vite build",
     "preview": "vite preview",
     "watch": "tsc -b -w",
     "postinstall": "monaco-treemending"
