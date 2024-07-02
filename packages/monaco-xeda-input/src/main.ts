@@ -72,8 +72,6 @@ const setup_and_run = async (elem: HTMLElement, editorText: string, fontFamily: 
     // registerFileUrl('/statemachine-grammar.json', new URL('../../node_modules/langium-statemachine-dsl/syntaxes/statemachine.tmLanguage.json', window.location.href).href);
 
     updateUserConfiguration(`{
-    "editor.fontSize": 14,
-    "editor.fontFamily": "${fontFamily}",
     "workbench.colorTheme": "Default Light Modern"
 }`);
 
